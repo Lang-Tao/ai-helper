@@ -1,75 +1,8 @@
 <template>
   <div>
     <el-container>
-      <!--        头部-->
-      <el-header style="display: flex; color: white">
-        <i
-          @click="handleCollapse"
-          style="font-size: 26px"
-          :class="collapseIcon"></i>
-        <span style="padding-left: 20px; font-size: 20px">logo</span>
 
-        <el-input
-          v-model="input"
-          placeholder="请输入内容"
-          style="width: 300px; margin-left: 500px; justify-content: center"
-          size="small">
-          <i slot="prefix" class="el-input__icon el-icon-search"></i>
-        </el-input>
-
-        <div
-          style="
-            padding-left: 50px;
-            font-size: 14px;
-            display: flex;
-            justify-content: space-between;
-            width: 500px;
-          ">
-          <span>集团账号</span>
-          <span>备案</span>
-          <span>工具</span>
-          <span>客服支持</span>
-          <span>试用</span>
-          <span>费用</span>
-          <i
-            style="align-items: center; font-size: 20px"
-            class="el-icon-question"></i>
-          <i
-            style="align-items: center; font-size: 20px"
-            class="el-icon-message-solid"></i>
-        </div>
-
-        <div
-          style="
-            display: flex;
-            align-items: center;
-            cursor: default;
-            padding-left: 200px;
-          ">
-          <div
-            style="
-              display: flex;
-              flex-direction: column;
-              align-items: flex-end;
-            ">
-            <span style="font-size: 10px">99999999</span>
-            <span style="font-size: 10px">主账号</span>
-          </div>
-          <img
-            src="@/assets/img/logo1.png"
-            alt=""
-            style="
-              width: 40px;
-              height: 40px;
-              border-radius: 50%;
-              margin-left: 20px;
-              margin-right: 10px;
-            " />
-        </div>
-      </el-header>
-
-      <el-container>
-        <!--      侧边栏-->
+    <!--      侧边栏-->
         <el-aside
           :width="asideWidth"
           style="min-height: 100vh; background-color: #333333">
@@ -124,6 +57,56 @@
           </el-menu>
         </el-aside>
 
+      <el-container>
+
+        <!--        头部-->
+      <el-header style="display: flex; color: white">
+        <i
+          @click="handleCollapse"
+          style="font-size: 26px"
+          :class="collapseIcon"></i>
+        <span style="padding-left: 20px; font-size: 20px">logo</span>
+
+        <el-input
+          v-model="input"
+          placeholder="请输入内容"
+          style="width: 300px; margin-left: 500px; justify-content: center"
+          size="small">
+          <i slot="prefix" class="el-input__icon el-icon-search"></i>
+        </el-input>
+
+        
+
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            cursor: default;
+            padding-left: 200px;
+          ">
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              align-items: flex-end;
+            ">
+            <span style="font-size: 10px">99999999</span>
+            <span style="font-size: 10px">主账号</span>
+          </div>
+          <img
+            src="@/assets/img/logo1.png"
+            alt=""
+            style="
+              width: 40px;
+              height: 40px;
+              border-radius: 50%;
+              margin-left: 20px;
+              margin-right: 10px;
+            " />
+        </div>
+      </el-header>
+        
+
         <!--        内容区域-->
         <el-main>
           <router-view/>
@@ -134,7 +117,7 @@
   </div>
 </template>
 
-<
+
 <script>
   import axios from "axios";
 
