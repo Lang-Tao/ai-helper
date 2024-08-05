@@ -3,7 +3,9 @@
 </script>
 
 <template>
-  $END$
+  <div>
+    Team
+  </div>
 </template>
 
 <style scoped>

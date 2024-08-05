@@ -1,6 +1,6 @@
 <template>
   <div>
-    
+    home
   </div>
 </template>
 
@@ -11,7 +11,9 @@
   export default {
     name: "manager",
     data() {
-      
+      return{
+        
+      }
     },
     mounted() {
     },
