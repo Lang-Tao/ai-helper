@@ -8,7 +8,7 @@
             <span slot="title">工作台</span>
           </el-menu-item>
 
-          <el-menu-item index="/repositories">
+          <el-menu-item index="/project">
             <i class="el-icon-folder-opened"></i>
             <span slot="title">项目</span>
           </el-menu-item>
@@ -33,12 +33,14 @@
             <span slot="title">设置</span>
           </el-menu-item>
 
+          
+
           <el-menu-item index="/person" style="margin-top: auto;" class="avatar-item">
             <el-dropdown placement="bottom">
-              <div class="avatar-container" style="display:flex; text-align:center; justify-content: center; ">
-                <img  src="@/assets/img/logo1.png" alt="" class="avatar-img">
+              <div class="avatar-container" style="display:flex; text-align:center; justify-content: center;">
+                <img src="@/assets/img/logo1.png" alt="" class="avatar-img">
                 <transition name="el-fade-in">
-                  <span  v-show="!iscollapsed" class="username">用户名</span>
+                  <span v-show="!iscollapsed" class="username">用户名</span>
                 </transition>
               </div>
               <el-dropdown-menu slot="dropdown" placement="bottom-end">
@@ -51,14 +53,27 @@
         </el-menu>
       </el-aside>
 
-      <el-container>
-        <el-header>
+      <el-container :style="{ marginLeft: iscollapsed ? '64px' : '200px' }" class="main-container">
+
+        <!--头部栏-->
+        <el-header >
           <i :class="CollapseIcon" class="collapse-icon" @click="toggleCollapse"></i>
-          <span class="header-title">{{ currentPageTitle }}</span>
+          <span v-if="ActivePath !== '//project-details'" class="header-title">{{ currentPageTitle }}</span>
+          <div v-else>
+            <span class="header-router"  @click="$router.push('/project')" >项目</span>
+            <span class="header-title" >/  {{ Project.name }}</span>
+            
+          </div>
         </el-header>
+
+
+
+        <!--内容栏-->
         <el-main>
           <router-view/>
         </el-main>
+
+
       </el-container>
     </el-container>
   </div>
@@ -71,6 +86,10 @@ export default {
     return {
       iscollapsed: false,
       defaultActivePath: '',
+      ActivePath: '',
+      ProjectAddress: '',
+      Project:{},
+
     };
   },
   computed: {
@@ -84,10 +103,32 @@ export default {
   methods: {
     toggleCollapse() {
       this.iscollapsed = !this.iscollapsed;
+    },
+    getProjectByAddress(ProjectAddress){  // todo 根据地址获取项目信息
+      return {
+        name: "项目1",
+        address: "xiangmu1",
+        admin: "管理员1",
+        adminAvatar: "",
+        operation: "操作1",
+        accessTime: "2024-08-07",
+        createTime: "2024-08-01",
+      };
     }
   },
   created() {
     this.defaultActivePath = `/${this.$route.path.split('/').slice(0, 2).join('/')}`;
+    this.ActivePath = `/${this.$route.path.split('/').slice(0, 2).join('/')}`;
+    this.ProjectAddress = `${this.$route.path.split('/').slice(2,3).join('/')}` ;
+     this.Project = this.getProjectByAddress(this.ProjectAddress);
+  },
+  watch:{
+    $route(to){
+      this. ActivePath = `/${to.path.split('/').slice(0, 2).join('/')}`;
+      this.ProjectAddress = `${this.$route.path.split('/').slice(2,3).join('/')}` ;
+      this.Project = this.getProjectByAddress(this.ProjectAddress);
+    
+    }
   }
 };
 </script>
@@ -96,17 +137,22 @@ export default {
 .el-header {
   display: flex;
   align-items: center;
-  background-color: #F5F7FA;
+  background-color: #ffffff;
   color: black;
   line-height: 60px;
   border-bottom: 1px solid #E0E6ED;
-  padding: 0 20px; /* 添加内边距使内容有间隔 */
+  padding:0px !important;
+  z-index: 1000;
+  position: fixed;
+  width: 100%;
+  top: 0;
 }
 .el-aside {
   background-color: #2E363F;
   color: white;
   overflow: hidden; /* 取消滚动条 */
   transition: width 0.3s ease-in-out;
+  position: fixed;
 }
 .el-menu {
   background-color: #2E363F;
@@ -129,15 +175,28 @@ export default {
 }
 .el-main {
   padding: 0px !important;
+  margin-top:60px;
 }
 .collapse-icon {
+  margin-left: 13px ;
   font-size: 20px;
   cursor: pointer;
 }
 .header-title {
-  font-size: 26px;
+  text-align: center;
+  font-size: 23px;
   font-weight: bold;
   margin: 10px;
+}
+.header-router{
+  text-align: center;
+  font-size: 23px;
+  font-weight: 500;
+  margin: 10px;
+}
+.header-router:hover{
+  cursor:pointer;
+  color:#2a75ff
 }
 .avatar-container {
   height: 100%;
@@ -160,5 +219,16 @@ export default {
 }
 .avatar-item{
   padding: 6px !important;
+}
+.main-container{
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: margin-left 0.3s ease-in-out;
+}
+.-webkit-scrollbar {
+    display: none;
 }
 </style>

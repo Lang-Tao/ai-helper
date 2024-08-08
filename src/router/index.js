@@ -26,7 +26,21 @@ const routes = [
         path: 'check',
         name: 'check',
         meta: { title: '审查' },
-        component: () => import('../views/Manager/Check.vue')
+        component: () => import('../views/Manager/Check.vue'),
+        children:[
+          {
+            path: 'person-check',
+            name: 'person-check',
+            meta: { title: '审查' },
+            component: () => import('../views/Manager/Check/Person.vue')
+          },
+          {
+            path: 'intelligence-check',
+            name: 'intelligence-check',
+            meta: { title: '审查' },
+            component: () => import('../views/Manager/Check/Intelligence.vue')
+          },
+        ]
       },
       {
         path: 'knowledge',
@@ -41,31 +55,90 @@ const routes = [
         component: () => import('../views/Manager/Team.vue')
       },
       {
-        path: 'repositories',
-        name: 'repositories',
-        redirect: '/repositories/involved',
+        path: '/project-details/:address',
+        name: 'ProjectDetails',
+        meta: { title: '当前项目' },
+        redirect: '/project-details/:address/home',
+        component: () => import('../components/ProjectDetail.vue'),
+        props: true,
+        children: [
+          { 
+            path: 'Home', 
+            name: 'projectHome',
+            meta: { title: '项目概览' },
+            props: true,
+            component: () => import('../components/project/Home.vue')
+            
+          },
+          { 
+            path: 'QnA', 
+            name: 'projectQnA',
+            meta: { title: '智能问答' },
+            props: true,
+            component: () => import('../components/project/QnA.vue')
+          },
+          { 
+            path: 'Repository', 
+            name: 'projectRepository',
+            meta: { title: '代码仓库' },
+            props: true,
+            component: () => import('../components/project/Repository.vue')
+          },
+          { 
+            path: 'Collaboration', 
+            name: 'projectCollaboration',
+            meta: { title: '项目协同' },
+            props: true,
+            component: () => import('../components/project/Collaboration.vue')
+          },
+          { 
+            path: 'Summary', 
+            name: 'projectSummary',
+            meta: { title: '项目总结' },
+            props: true,
+            component: () => import('../components/project/Summary.vue')
+          },
+          { 
+            path: 'Setting', 
+            name: 'projectSetting',
+            meta: { title: '项目设置' },
+            props: true,
+            component: () => import('../components/project/Setting.vue')
+          },
+        ]
+      },
+      {
+        path: 'project',
+        name: 'project',
+        redirect: '/project/involved',
         meta: { title: '项目' },
-        component: () => import('../views/Manager/Repository.vue'),
+        component: () => import('../views/Manager/Project.vue'),
         children:[
           {
-            path: 'involved', // 子路由的路径应为相对路径
+            path: 'involved', 
             name: 'involved',
-            meta: { title: '参与项目' },
+            meta: { title: '项目' },
             component: () => import('../views/Manager/Project/InvolvedProject.vue')
           },
           {
-            path: 'manage', // 子路由的路径应为相对路径
+            path: 'manage', 
             name: 'imanage',
-            meta: { title: '管理项目' },
+            meta: { title: '项目' },
             component: () => import('../views/Manager/Project/ManageProject.vue')
           },
           {
-            path: 'all', // 子路由的路径应为相对路径
+            path: 'all', 
             name: 'all',
-            meta: { title: '所有项目' },
+            meta: { title: '项目' },
             component: () => import('../views/Manager/Project/AllProject.vue')
           },
         ]
+      },
+      {
+        path: 'project-creat',
+        name: 'create',
+        meta: { title: '项目' },
+        component: () => import('../views/Manager/Project/CreateProject.vue')
       },
       {
         path: 'password',
