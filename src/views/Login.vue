@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import ValidCode from "@/components/ValidCode";
+import ValidCode from "@/components/others/ValidCode";
 
 export default {
   name: "login",

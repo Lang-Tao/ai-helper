@@ -91,6 +91,10 @@ export default {
         this.$router.push({ name: 'projectSetting', params: { address: row.address, title: row.name } });
       } else if (command === 'delete') {
         this.handleDelete(row);
+      } else if (command === 'changYong') {
+        this.$emit('add-to-favorites', row);
+        console.log("添加到常用项目", row);
+        
       }
     },
     handleDelete(row) {

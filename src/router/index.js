@@ -3,6 +3,8 @@ import VueRouter from 'vue-router'
 
 Vue.use(VueRouter)
 
+
+
 const routes = [
   {
     path: '/',
@@ -52,14 +54,35 @@ const routes = [
         path: 'team',
         name: 'team',
         meta: { title: '用户 / 团队' },
-        component: () => import('../views/Manager/Team.vue')
+        component: () => import('../views/Manager/Team.vue'),
+        redirect: '/team/team-member',
+        children:[
+          {
+            path: 'team-member',
+            name: 'team-member',
+            meta: { title: '用户 / 团队' },
+            component: () => import('../components/team/TeamMember.vue'),
+          },
+          {
+            path: 'team-group',
+            name: 'team-group',
+            meta: { title: '用户 / 团队' },
+            component: () => import('../components/team/TeamGruop.vue'),
+          },
+          {
+            path: 'team-permission',
+            name: 'team-permission',
+            meta: { title: '用户 / 团队' },
+            component: () => import('../components/team/TeamPermission.vue'),
+          },
+        ]
       },
       {
         path: '/project-details/:address',
         name: 'ProjectDetails',
         meta: { title: '当前项目' },
         redirect: '/project-details/:address/home',
-        component: () => import('../components/ProjectDetail.vue'),
+        component: () => import('../components/project/ProjectDetail.vue'),
         props: true,
         children: [
           { 
@@ -67,7 +90,7 @@ const routes = [
             name: 'projectHome',
             meta: { title: '项目概览' },
             props: true,
-            component: () => import('../components/project/Home.vue')
+            component: () => import('../components/projectDetails/Home.vue')
             
           },
           { 
@@ -75,35 +98,47 @@ const routes = [
             name: 'projectQnA',
             meta: { title: '智能问答' },
             props: true,
-            component: () => import('../components/project/QnA.vue')
+            component: () => import('../components/projectDetails/QnA.vue')
           },
           { 
             path: 'Repository', 
             name: 'projectRepository',
             meta: { title: '代码仓库' },
             props: true,
-            component: () => import('../components/project/Repository.vue')
+            component: () => import('../components/projectDetails/Repository.vue'),
+            children:[
+              { 
+                path: "/repo/:name", 
+                name: "RepoDetails", 
+                component:() => import('@/components/repositoryViews/RepoDetails.vue'), 
+              },
+              { 
+                path: "/repo/:name/commit/:hash", 
+                name: "CommitDetails", 
+                component:() => import('../components/repositoryViews/CommitDetails.vue'), 
+              },
+            ]
           },
           { 
             path: 'Collaboration', 
             name: 'projectCollaboration',
             meta: { title: '项目协同' },
             props: true,
-            component: () => import('../components/project/Collaboration.vue')
+            component: () => import('../components/projectDetails/Collaboration.vue')
           },
           { 
             path: 'Summary', 
             name: 'projectSummary',
             meta: { title: '项目总结' },
             props: true,
-            component: () => import('../components/project/Summary.vue')
+            component: () => import('../components/projectDetails/Summary.vue')
           },
           { 
             path: 'Setting', 
             name: 'projectSetting',
             meta: { title: '项目设置' },
             props: true,
-            component: () => import('../components/project/Setting.vue')
+            component: () => import('../components/projectDetails/Setting.vue')
           },
         ]
       },

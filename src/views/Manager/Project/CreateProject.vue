@@ -9,12 +9,12 @@
       <div style="margin-top: 20px;margin-left:5px; justify-content:flex-start; width:50% ">
         <el-form :model="form" :rules="rules" ref="form">
           <el-form-item label="项目名称" prop="name" style="font-size: 16px; font-weight: bold; color:black">
-            <el-input placeholder="给项目起个名称" v-model="form.name"></el-input>
+            <el-input placeholder="给项目起个名称" v-model="form.name"  maxlength="31" show-word-limit></el-input>
             <span style="font-size: 12px; color: #999999; font-weight:lighter">请输入 1~31 位以内的项目名称</span>
           </el-form-item>
 
           <el-form-item label="项目标识" prop="address" style="font-size: 16px; font-weight: bold; color:black">
-              <el-input placeholder="项目地址的一部分" v-model="form.address">
+              <el-input placeholder="项目地址的一部分" v-model="form.address" maxlength="31" show-word-limit>
                 <template slot="prepend">https://ai-helper/p/</template>
               </el-input>
             <span style="font-size: 12px; color: #999999; font-weight:lighter">用于唯一标记项目，也可用于组织项目 URL</span>

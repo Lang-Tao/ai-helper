@@ -92,6 +92,9 @@ export default {
 
     };
   },
+  mounted() {
+      this.defaultActive = '/home'
+  },
   computed: {
     currentPageTitle() {
       return this.$route.meta.title || '未命名页面';

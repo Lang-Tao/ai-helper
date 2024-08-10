@@ -2,10 +2,18 @@
     <div>
   <el-card shadow="never" >
     <h2>项目设置</h2>
-    <el-form :model="projectForm" label-width="120px">
+    <el-form :model="project" label-width="120px">
+
+
+        <!-- 项目名称 -->
+      <el-form-item label="项目名称" required>
+        <el-input v-model="project.name" placeholder="请输入项目名称"></el-input>
+      </el-form-item>
+
+
       <!-- 项目地址 -->
       <el-form-item label="项目地址" required>
-        <el-input v-model="projectForm.url" placeholder="请输入项目名称" >
+        <el-input v-model="project.address" placeholder="请输入项目名称" >
           <template slot="prepend">https://ai-helper/p/</template>
         </el-input>
         <el-alert 
@@ -16,28 +24,25 @@
           :closable="false"
           style="line-height:normal;"
         />
+
       </el-form-item>
 
-      <!-- 项目名称 -->
-      <el-form-item label="项目名称" required>
-        <el-input v-model="projectForm.name" placeholder="请输入项目名称"></el-input>
-      </el-form-item>
-
+    
       <!-- 项目描述 -->
       <el-form-item label="项目描述">
-        <el-input v-model="projectForm.description" placeholder="项目描述"></el-input>
+        <el-input v-model="project.description" placeholder="项目描述"></el-input>
       </el-form-item>
 
       <!-- 项目时间 -->
       <el-form-item label="项目时间">
         <el-date-picker
-          v-model="projectForm.startDate"
+          v-model="project.startDate"
           type="date"
           placeholder="开始时间">
         </el-date-picker>
         <span> ~ </span>
         <el-date-picker
-          v-model="projectForm.endDate"
+          v-model="project.endDate"
           type="date"
           placeholder="完成时间">
         </el-date-picker>
@@ -63,18 +68,13 @@ export default {
     },
   data() {
     return {
-      projectForm: {
-        url: '',
-        name: '',
-        description: '',
-        startDate: null,
-        endDate: null,
-      }
+      project: {},
     };
   },
   methods: {
     handleSubmit() {
-      console.log('更新:', this.projectForm);
+      console.log('更新:', this.project);
+     
       // 这里可以添加提交逻辑，例如发送到服务器
     },
     handleCancel() {
@@ -83,8 +83,23 @@ export default {
         message: '取消操作',
         type: 'info'
       });
-    }
-  }
+    }, 
+    getProjectByAddress(address) {
+      return{
+        name: "项目1",
+        address: "xiangmu1",
+        admin: "管理员1",
+        adminAvatar: "",
+        operation: "操作1",
+        accessTime: "2024-08-07",
+        createTime: "2024-08-01",
+        
+      }  // todo 根据地址获取项目信息
+     }
+},
+created(){
+  this.project = this.getProjectByAddress(this.address)
+}
 };
 </script>
 

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="display:flex; justify-content: center; margin-top: 50px">
     <el-card style="width: 50%">
       <el-form ref="formRef" :model="user" :rules="rules" label-width="80px" style="padding-right: 20px">
         <el-form-item label="原始密码" prop="password">

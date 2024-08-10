@@ -7,9 +7,11 @@
         router
       >
         <el-menu-item index="/check/person-check">
+          <i style="margin:0 10px 0 0px; font-size:18px; line-height:18px" class="iconfont icon-rengongshencha" />
           <span slot="title">人工审查</span>
         </el-menu-item>
         <el-menu-item index="/check/intelligence-check">
+          <i style="margin:0 10px 0 0px; font-size:18px; line-height:18px" class="iconfont icon-zhinengshencha" />
           <span slot="title">智能审查</span>
         </el-menu-item>
       </el-menu>

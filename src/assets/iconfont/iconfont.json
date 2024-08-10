@@ -6,6 +6,48 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "7596821",
+      "name": "24gl-userGroup",
+      "font_class": "24gl-userGroup",
+      "unicode": "eb25",
+      "unicode_decimal": 60197
+    },
+    {
+      "icon_id": "9826653",
+      "name": "成员管理",
+      "font_class": "chengyuanguanli",
+      "unicode": "e612",
+      "unicode_decimal": 58898
+    },
+    {
+      "icon_id": "12095317",
+      "name": "书签",
+      "font_class": "shuqian",
+      "unicode": "e65d",
+      "unicode_decimal": 58973
+    },
+    {
+      "icon_id": "15986892",
+      "name": "人工审查",
+      "font_class": "rengongshencha",
+      "unicode": "e627",
+      "unicode_decimal": 58919
+    },
+    {
+      "icon_id": "26353771",
+      "name": "智能审查",
+      "font_class": "zhinengshencha",
+      "unicode": "e979",
+      "unicode_decimal": 59769
+    },
+    {
+      "icon_id": "29429072",
+      "name": "团队权限",
+      "font_class": "tuanduiquanxian",
+      "unicode": "e679",
+      "unicode_decimal": 59001
+    },
+    {
       "icon_id": "4111811",
       "name": "代码",
       "font_class": "code",
