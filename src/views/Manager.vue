@@ -117,7 +117,7 @@ export default {
     }
   },
   created() {
-    this.defaultActivePath = `/${this.$route.path.split('/').slice(0, 2).join('/')}`;
+    this.defaultActivePath = `${this.$route.path.split('/').slice(0, 2).join('/')}`;
     this.ActivePath = `/${this.$route.path.split('/').slice(0, 2).join('/')}`;
     this.ProjectAddress = `${this.$route.path.split('/').slice(2,3).join('/')}` ;
      this.Project = this.getProjectByAddress(this.ProjectAddress);

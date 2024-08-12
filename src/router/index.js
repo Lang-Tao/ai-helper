@@ -29,6 +29,7 @@ const routes = [
         name: 'check',
         meta: { title: '审查' },
         component: () => import('../views/Manager/Check.vue'),
+        redirect: '/check/person-check',
         children:[
           {
             path: 'person-check',
