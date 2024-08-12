@@ -1,6 +1,6 @@
 <template>
-  <div style="display:flex; justify-content: center; margin-top: 50px">
-    <el-card style="width: 50%">
+  <div style="display:flex; justify-content: center; margin-top: 150px">
+    <el-card style="width: 50%" shadow="never">
       <el-form ref="formRef" :model="user" :rules="rules" label-width="80px" style="padding-right: 20px">
         <el-form-item label="原始密码" prop="password">
           <el-input show-password v-model="user.password" placeholder="原始密码"></el-input>
@@ -36,6 +36,7 @@ export default {
     return {
       user: JSON.parse(localStorage.getItem('honey-user') || '{}'),
       rules: {
+      
         password: [
           { required: true, message: '请输入原始密码', trigger: 'blur' },
         ],
