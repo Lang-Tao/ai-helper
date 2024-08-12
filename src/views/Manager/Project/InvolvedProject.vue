@@ -17,10 +17,12 @@
 
           <div slot='header'>
            
-            <span style="font-size: 14px;  color: #657694; line-height: 24px;">{{ project.name }}</span>
+            <span style="font-size: 14px;  color: #657694; line-height: 24px; ">
+               {{ project.name.length > 8 ? project.name.substring(0, 8) + '...' : project.name }} 
+            </span>
             
           
-            <el-button style="margin-left:125px" icon="iconfont icon-shuqian" type="text" @click="removeFromFavorites(index)"></el-button>
+            <el-button style="margin-left:5px" icon="iconfont icon-shuqian" type="text" @click="removeFromFavorites(index)"></el-button>
           </div>
 
           
@@ -61,20 +63,13 @@
               </el-button>
             </el-tooltip>
           </div>
-       
-
 
           
         </el-card>
 
       </div>
 
-
-
-
     </div>
-    
-
 
 
     <ProjectList v-if="tableData.length > 0" :table-data="tableData" @add-to-favorites="addToFavorites" />
@@ -85,7 +80,8 @@
 
 <script>
 import ProjectList from '@/components/project/ProjectList.vue';
-import { Message } from 'element-ui'
+import { Message } from 'element-ui';
+
 
 export default {
   name: "",
@@ -93,7 +89,7 @@ export default {
     data() {
       return {
           tableData: [{
-            name: '项目1项目1项目1项目1项目1项目1项目1项目1项目1项目1项',
+            name: '项目1',
             address:'xiangmu1',
             admin: '管理员1',
             adminAvatar: '', 
@@ -119,7 +115,7 @@ export default {
        Message({
           message: '移除成功',
           type: 'success',
-          duration: 3000, // 消息框显示时间，毫秒为单位 
+          duration: 3000,
           });
 
     },
@@ -135,6 +131,7 @@ export default {
   mounted() {
 
   },
+
 }
 
 </script>

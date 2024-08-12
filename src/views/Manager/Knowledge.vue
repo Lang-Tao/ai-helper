@@ -4,7 +4,9 @@
 
 <template>
   <div>
-    Knowledge
+    <span style=" width: 1em;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">
+      Knowledge
+    </span>
   </div>
 </template>
 

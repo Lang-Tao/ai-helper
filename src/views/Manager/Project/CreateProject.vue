@@ -35,6 +35,8 @@
 </template>
 
 <script>
+import pinyin from 'pinyin'
+   
 export default {
   name: "createProject",
   data() {
@@ -70,8 +72,19 @@ export default {
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
-    }
-  }
+    },
+     getPinyin(str){
+      return pinyin(str, {
+        style: pinyin.STYLE_NORMAL, // 设置拼音风格
+      }).join(''); // 将拼音数组转换为字符串
+    },
+  },
+  watch: {
+    'form.name'(newValue) {
+      // 当 form.name 发生变化时,更新 form.address 的值
+      this.form.address = this.getPinyin(this.form.name);
+    },
+  },
 };
 </script>
 

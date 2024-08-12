@@ -143,10 +143,14 @@ img{
   word-wrap: break-word;
 }
 
+.message-container.user {
+  justify-content: flex-end;
+}
+
 .message.user {
-  background-color: #007bff !important;
+  background-color: #0056b3 !important;
   color: white;
-  box-shadow: 0 2px 4px rgba(0, 123, 255, 0.4); 
+  box-shadow: 0 2px 4px rgba(0, 123, 255, 0.4);
 }
 
 .message.bot {
