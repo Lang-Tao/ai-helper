@@ -28,12 +28,15 @@
 </template>
 
 <script>
-export default{
-  data(){
-  return {
-    activePath: '/team/team-member'
-  }
-}
+export default {
+  data() {
+    return {
+      activePath: `${this.$route.path.split('/').slice(0, 3).join('/')}`, 
+    };
+  },
+  created() {
+    this.defaultActivePath = `${this.$route.path.split('/').slice(0, 3).join('/')}`;
+  },
 }
 
 </script>

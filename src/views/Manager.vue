@@ -114,7 +114,7 @@ export default {
         accessTime: "2024-08-07",
         createTime: "2024-08-01",
       };
-    }
+    },
   },
   created() {
     this.defaultActivePath = `${this.$route.path.split('/').slice(0, 2).join('/')}`;
@@ -127,7 +127,6 @@ export default {
       this. ActivePath = `/${to.path.split('/').slice(0, 2).join('/')}`;
       this.ProjectAddress = `${this.$route.path.split('/').slice(2,3).join('/')}` ;
       this.Project = this.getProjectByAddress(this.ProjectAddress);
-    
     }
   }
 };
