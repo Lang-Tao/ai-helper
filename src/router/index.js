@@ -214,4 +214,19 @@ VueRouter.prototype.push = function push (location) {
   return originalPush.call(this, location).catch(err => err)
 }
 
+
+// 路由守卫
+router.beforeEach((to, from, next) => {
+  if (to.path === '/login' || to.path === '/register') {
+    next()
+  } else {
+    let token = localStorage.getItem('token')
+    if (token === null || token === '') {
+      next('/login')
+    }else{
+      next()
+    }
+  }
+})
+
 export default router

@@ -1,5 +1,7 @@
 <template>
   <div>
+
+    <!--搜索筛选栏-->
     <div
       style="height: 50px; width: 100%; background-color: #fcfcfc; border-bottom: 1px solid rgba(208, 208, 208, 0.6); 
       display: flex; align-items: center; justify-content: space-between; padding: 0 20px "
@@ -17,9 +19,12 @@
         <el-button style="margin-left: 10px;" @click="toggleSortOrder" :icon="sortIcon" plain></el-button>
       </div>
     </div>
-    
-    <ProjectList v-if="sortedAndFilteredData.length > 0" :table-data="sortedAndFilteredData" />
+
+
+    <!--项目列表-->
+    <ProjectList v-if="sortedAndFilteredData.length > 0" :projetArray="sortedAndFilteredData" />
     <el-empty v-else description="暂无项目"></el-empty>
+
   </div>
 </template>
 
@@ -42,8 +47,8 @@ export default {
       opt: "accessTime",
       sortOrder: "asc",
       sortIcon: "iconfont icon-zhengxu",
-      tableData: [
-        {
+      allProjectList: [
+        {                                // 测试数据，实际数据需要从后端获取
           name: "项目2",
           address: "xiangmu2",
           admin: "管理员2",
@@ -51,15 +56,14 @@ export default {
           operation: "操作2",
           accessTime: "2024-08-06",
           createTime: "2024-08-02",
-        },
-        // 更多项目数据
+        }, 
       ],
     };
   },
   computed: {
     sortedAndFilteredData() {
       const query = this.query.toLowerCase();
-      let filteredData = this.tableData.filter((item) => {
+      let filteredData = this.allProjectList.filter((item) => {
         return (
           item.name.toLowerCase().includes(query) ||
           item.address.toLowerCase().includes(query) ||
@@ -90,6 +94,10 @@ export default {
     toggleSortOrder() {
       this.sortOrder = this.sortOrder === "asc" ? "desc" : "asc";
       this.sortIcon = this.sortOrder === "asc" ? "iconfont icon-zhengxu" : "iconfont icon-daoxu";
+    },
+    getAllProjectList() {
+      // todo 调用接口获取所有项目列表
+      // this.allProjectList = response.data;
     },
   },
 };

@@ -3,37 +3,37 @@
 
     <el-aside width="200px" style="height: 100vh;position:fixed">
       <el-menu
-        :default-active="$router.path"
+        :default-active="activePath"
         style="height: 100vh; "
         router
       >
         <el-menu-item :index="getDynamicPath('home')">
-          <i style="margin:0 10px 0 20px; font-size:18px; line-height:18px" class="iconfont icon-xiangmugailan" />
+          <i style="margin:0 10px 0 0px; font-size:18px; line-height:18px" class="iconfont icon-xiangmugailan" />
           <span  slot="title">项目概览</span>
         </el-menu-item>
 
         <el-menu-item :index="getDynamicPath('QnA')">
-          <i style="margin:0 10px 0 20px; font-size:18px; line-height:18px" class="iconfont icon-zhinengwenda" />
+          <i style="margin:0 10px 0 0px; font-size:18px; line-height:18px" class="iconfont icon-zhinengwenda" />
           <span slot="title">智能问答</span>
         </el-menu-item>
 
         <el-menu-item :index="getDynamicPath('Repository')">       
-          <i style="margin:0 10px 0 20px; font-size:18px; line-height:18px" class="iconfont icon-daimacangku" />
+          <i style="margin:0 10px 0 0px; font-size:18px; line-height:18px" class="iconfont icon-daimacangku" />
           <span slot="title">代码仓库</span>
         </el-menu-item>
         
         <el-menu-item :index="getDynamicPath('Collaboration')">
-           <i style="margin:0 10px 0 20px; font-size:18px; line-height:18px" class="iconfont icon-xiangmuxietong" />
+           <i style="margin:0 10px 0 0px; font-size:18px; line-height:18px" class="iconfont icon-xiangmuxietong" />
           <span slot="title">项目协同</span>
         </el-menu-item>
 
         <el-menu-item :index="getDynamicPath('Summary')">
-            <i style="margin:0 10px 0 20px; font-size:18px; line-height:18px" class="iconfont icon-xiangmuzongjie" />
+            <i style="margin:0 10px 0 0px; font-size:18px; line-height:18px" class="iconfont icon-xiangmuzongjie" />
           <span slot="title">项目总结</span>
         </el-menu-item>
 
         <el-menu-item :index="getDynamicPath('Setting')">
-            <i style="margin:0 10px 0 20px; font-size:18px; line-height:18px" class="iconfont icon-shezhi" />
+            <i style="margin:0 10px 0 0px; font-size:18px; line-height:18px" class="iconfont icon-shezhi" />
           <span slot="title">项目设置</span>
         </el-menu-item>
       </el-menu>
@@ -51,20 +51,21 @@ export default {
   props: ['address'],
   data() {
     return {
-      project: {}
+      project: {},
+      activePath: `${this.$route.path.split('/').slice(0, 4).join('/')}`, 
     };
   },
   created() {
     this.fetchProjectData();
-    document.title = this.$route.params.title; // 设置页面标题
+    
   },
   computed: {
       getDynamicPath() {
-      return (subPath) => `/project-details/${this.$route.params.address}/${subPath}`;
+        return (subPath) => `/project-details/${this.$route.params.address}/${subPath}`;
     }
   },
   watch: {
-    '$route.params.address': 'fetchProjectData'
+    '$route.params.address': 'fetchProjectData',
   },
   methods: {
     fetchProjectData() {
@@ -81,5 +82,13 @@ export default {
 </script>
 
 <style scoped>
-/* 添加你的样式 */
+.el-menu-item.is-active {
+  margin: 0 !important; 
+  background-color: #ecf5ff;
+  color: #409EFF;
+}
+.el-menu-item {
+  transition: none !important; 
+  text-align: center;
+}
 </style>

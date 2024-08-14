@@ -1,7 +1,13 @@
 <template>
   <div style="margin: 10px 20px;">
-    <el-table :data="tableData" style="width: 100%" @row-click="handleRowClick">
-      <el-table-column prop="name" label="项目名称" width="840"></el-table-column>
+    <el-table :data="projetArray" style="width: 100%" @cell-click="handleCellClick">
+      <el-table-column prop="name" label="项目名称" width="840">
+        <template slot-scope="scope">
+          <div class="name-cell" @click="handleCellClick(scope.row, scope.column)">
+            {{ scope.row.name }}
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column label="功能模块" width="300">
         <template slot-scope="scope">
           <div style="display: flex; justify-content: space-between; align-items: center; width:150px">
@@ -9,13 +15,6 @@
               <el-button
                 icon="iconfont icon-zhinengwenda"
                 @click="handleIconClick('QnA', scope.row, $event)"
-                style="padding: 0; min-width: 32px; min-height: 32px;">
-              </el-button>
-            </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="项目概览" placement="top" open-delay="500">
-              <el-button
-                icon="iconfont icon-xiangmugailan"
-                @click="handleIconClick('Home', scope.row, $event)"
                 style="padding: 0; min-width: 32px; min-height: 32px;">
               </el-button>
             </el-tooltip>
@@ -40,6 +39,13 @@
                 style="padding: 0; min-width: 32px; min-height: 32px;">
               </el-button>
             </el-tooltip>
+              <el-tooltip class="item" effect="dark" content="项目设置" placement="top" open-delay="500">
+              <el-button
+                icon="el-icon-setting"
+                @click="handleIconClick('Setting', scope.row, $event)"
+                style="padding: 0; min-width: 32px; min-height: 32px; font-size:16px">
+              </el-button>
+            </el-tooltip>
           </div>
         </template>
       </el-table-column>
@@ -55,8 +61,8 @@
           <el-dropdown trigger="click" @command="handleCommand($event, scope.row)" @click.native.stop>
             <el-button style="margin-left: -8px" class="el-dropdown-link" size="mini" icon="el-icon-more" round></el-button>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item command="changYong" :row="scope.row" icon="el-icon-collection-tag">设为常用项目</el-dropdown-item>
-              <el-dropdown-item command="settings" :row="scope.row" icon="el-icon-setting">项目设置</el-dropdown-item>
+              <el-dropdown-item v-if="scope.row.isFavorite" command="cancelChangYong" :row="scope.row" icon="iconfont icon-shuqian">取消常用项目</el-dropdown-item>
+              <el-dropdown-item v-else command="setChangYong" :row="scope.row" icon="el-icon-collection-tag">设为常用项目</el-dropdown-item>
               <el-dropdown-item command="delete" :row="scope.row" icon="el-icon-delete" style="color:red">删除项目</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -70,15 +76,17 @@
 export default {
   name: "ProjectList",
   props: {
-    tableData: {
+    projetArray: {
       type: Array,
       required: true,
     },
   },
   methods: {
-    handleRowClick(row) {
-      this.$router.push({ name: 'ProjectDetails', params: { address: row.address, title: row.name } });
-      console.log("Row clicked:", row);
+    handleCellClick(row, column, cell, event) {
+      if (column.property === 'name') {
+        this.$router.push({ name: 'ProjectDetails', params: { address: row.address, title: row.name } });
+        console.log("Name column clicked:", row);
+      }
     },
     handleIconClick(func, row, event) {
       event.stopPropagation(); // 阻止事件冒泡
@@ -87,23 +95,29 @@ export default {
     },
     handleCommand(command, row) {
       console.log("Command clicked:", command, row);
-      if (command === 'settings') {
-        this.$router.push({ name: 'projectSetting', params: { address: row.address, title: row.name } });
-      } else if (command === 'delete') {
+      if (command === 'delete') {
         this.handleDelete(row);
-      } else if (command === 'changYong') {
+      } else if (command === 'setChangYong') {
         this.$emit('add-to-favorites', row);
-        console.log("添加到常用项目", row);
-        
+      } else if (command === 'cancelChangYong') {
+        this.$emit('remove-from-favorites', row);
       }
     },
     handleDelete(row) {
       console.log("handleDelete clicked", row);
-      // 处理项目删除逻辑
+      // todo 处理项目删除逻辑
+      this.$message.success('删除成功');
     },
   },
 };
 </script>
 
 <style scoped>
+.name-cell {
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
 </style>

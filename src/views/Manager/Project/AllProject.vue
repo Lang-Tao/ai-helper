@@ -18,7 +18,10 @@
       </div>
     </div>
     
-    <ProjectList v-if="sortedAndFilteredData.length > 0" :table-data="sortedAndFilteredData" />
+
+
+    <!--项目列表-->
+    <ProjectList v-if="sortedAndFilteredData.length > 0" :projetArray="sortedAndFilteredData" />
     <el-empty v-else description="暂无项目"></el-empty>
   </div>
 </template>

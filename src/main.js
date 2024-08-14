@@ -11,6 +11,12 @@ import "@/assets/iconfont/iconfont.js"
 
 import "@/assets/css/global.css";
 
+import {
+    getToken,
+    setToken,
+    removeToken
+} from '@/utils/auth'
+
 Vue.config.productionTip = false;  // 阻止产生警告
 
 Vue.use(ElementUI);
@@ -19,14 +25,20 @@ Vue.use(ElementUI);
 Vue.config.productionTip = false
 
 new Vue({
+  
   router,
-  render: h => h(App)
+  render: h => h(App),
+  
 }).$mount('#app')
+
+
+document.title = "智能工程助手"
+
 
 router.beforeEach((to, from, next) => {
   /* 路由发生变化修改页面title */
   const defaultTitle = "智能工程助手"; // 初始化标题
-  if (to.meta.title || !to.meta.title === "undefined") {
+  if (to.meta.title) {
     document.title = to.meta.title + " | 智能工程助手";
   } else {
     document.title = defaultTitle;

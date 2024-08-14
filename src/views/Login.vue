@@ -87,20 +87,26 @@ export default {
       this.code = code.toLowerCase()
     },
     login() {
-      this.$refs['loginRef'].validate((valid) => {
-        if (valid) {
-          // 验证通过
-          // this.$request.post('/login', this.user).then(res => {
-          //   if (res.code === '200') {
-              this.$router.push('/')
-              this.$message.success('登录成功')
-          //     localStorage.setItem("honey-user", JSON.stringify(res.data))  // 存储用户数据
-          //   } else {
-          //     this.$message.error(res.msg)
-          //   }
-          // })
-        }
-      })
+    this.$refs['loginRef'].validate((valid) => {
+      if (valid) {  // 验证通过
+        // 模拟登录成功并设置一个测试 token
+
+        const testToken = 'your-test-token';
+        localStorage.setItem('token', testToken);
+        
+        this.$router.push('/');
+        this.$message.success('登录成功');
+
+        // todo 验证登录信息
+        // this.$request.post('/login', this.user).then(res => {
+        //   if (res.code === '200') {
+        //     localStorage.setItem("honey-user", JSON.stringify(res.data));  // 存储用户数据
+        //   } else {
+        //     this.$message.error(res.msg);
+        //   }
+        // });
+      }
+    });
     }
   }
 }

@@ -60,20 +60,24 @@ export default {
     goBack() {
       this.$router.go(-1);
     },
+
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           alert('submit!');
+          // todo 向后端提交表单新建项目
         } else {
           console.log('error submit!!');
           return false;
         }
       });
     },
+
     resetForm(formName) {
       this.$refs[formName].resetFields();
     },
-     getPinyin(str){
+
+    getPinyin(str){
       return pinyin(str, {
         style: pinyin.STYLE_NORMAL, // 设置拼音风格
       }).join(''); // 将拼音数组转换为字符串

@@ -46,7 +46,7 @@
               <el-dropdown-menu slot="dropdown" placement="bottom-end">
                 <el-dropdown-item>个人信息</el-dropdown-item>
                 <el-dropdown-item @click.native="$router.push('/password')">修改密码</el-dropdown-item>
-                <el-dropdown-item @click.native="$router.push('/login')" divided>退出登录</el-dropdown-item>
+                <el-dropdown-item @click.native="logout()" divided>退出登录</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </el-menu-item>
@@ -115,6 +115,21 @@ export default {
         createTime: "2024-08-01",
       };
     },
+    
+    logout() {
+      this.$confirm("确定退出登录吗？", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+      .then(() => {
+        localStorage.removeItem('token');
+        this.$router.push("/login");
+      })
+      .catch(() => {});
+    }
+
+
   },
   created() {
     this.defaultActivePath = `${this.$route.path.split('/').slice(0, 2).join('/')}`;
@@ -128,7 +143,8 @@ export default {
       this.ProjectAddress = `${this.$route.path.split('/').slice(2,3).join('/')}` ;
       this.Project = this.getProjectByAddress(this.ProjectAddress);
     }
-  }
+  },
+  
 };
 </script>
 

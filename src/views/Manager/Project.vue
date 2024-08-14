@@ -80,6 +80,7 @@ export default {
 
 .createBtn:hover {
   color: #e8e8e8;
+  cursor: pointer;
 }
 
 .createBtn:hover::before {

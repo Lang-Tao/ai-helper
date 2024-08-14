@@ -31,7 +31,7 @@ export default {
     };
   },
   created() {
-    this.defaultActivePath = `${this.$route.path.split('/').slice(0, 3).join('/')}`;
+   
   },
 }
 </script>

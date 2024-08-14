@@ -2,17 +2,18 @@
     <div>
   <el-card shadow="never" >
     <h2>项目设置</h2>
-    <el-form :model="project" label-width="120px">
+    
+    <el-form :model="project" label-width="120px" :rules="rules">
 
 
         <!-- 项目名称 -->
-      <el-form-item label="项目名称" required>
+      <el-form-item label="项目名称" prop="name">
         <el-input v-model="project.name" placeholder="请输入项目名称"></el-input>
       </el-form-item>
 
 
       <!-- 项目地址 -->
-      <el-form-item label="项目地址" required>
+      <el-form-item label="项目地址" prop="address">
         <el-input v-model="project.address" placeholder="请输入项目名称" >
           <template slot="prepend">https://ai-helper/p/</template>
         </el-input>
@@ -29,9 +30,9 @@
 
     
       <!-- 项目描述 -->
-      <el-form-item label="项目描述">
-        <el-input v-model="project.description" placeholder="项目描述"></el-input>
-      </el-form-item>
+       <el-form-item label="项目描述" prop="description"  style="font-size: 16px; font-weight: bold; color:black">
+            <el-input type="textarea" resize="none" rows="4" placeholder="100字以内项目描述（选填）" v-model="project.description"></el-input>
+          </el-form-item>
 
       <!-- 项目时间 -->
       <el-form-item label="项目时间">
@@ -51,7 +52,6 @@
       <!-- 操作按钮 -->
       <el-form-item>
         <el-button type="primary" @click="handleSubmit">更新</el-button>
-        <el-button @click="handleCancel">取消</el-button>
       </el-form-item>
     </el-form>
   </el-card>
@@ -59,6 +59,8 @@
 </template>
 
 <script>
+import { Message } from 'element-ui';
+
 export default {
     props: {
         address:{
@@ -69,21 +71,28 @@ export default {
   data() {
     return {
       project: {},
+      rules: {
+        name: [
+          { required: true, message: '请输入项目名称', trigger: 'blur' },
+        ],
+        address: [
+          { required: true, message: '请输入项目标识', trigger: 'blur' },
+        ],
+      }
     };
   },
   methods: {
     handleSubmit() {
       console.log('更新:', this.project);
      
-      // 这里可以添加提交逻辑，例如发送到服务器
+      // todo 添加提交逻辑，例如发送到服务器
+      
+      Message({
+          message: '更新成功',
+          type: 'success',
+          duration: 2000, // 消息框显示时间，毫秒为单位 
+          });
     },
-    handleCancel() {
-      // 处理取消操作
-      this.$message({
-        message: '取消操作',
-        type: 'info'
-      });
-    }, 
     getProjectByAddress(address) {
       return{
         name: "项目1",
