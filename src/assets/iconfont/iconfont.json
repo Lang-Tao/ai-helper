@@ -1,10 +1,17 @@
 {
   "id": "4645634",
-  "name": "no name",
+  "name": "智能工程助手",
   "font_family": "iconfont",
   "css_prefix_text": "icon-",
   "description": "",
   "glyphs": [
+    {
+      "icon_id": "10232796",
+      "name": "知识库",
+      "font_class": "zhishiku",
+      "unicode": "e790",
+      "unicode_decimal": 59280
+    },
     {
       "icon_id": "7596821",
       "name": "24gl-userGroup",

@@ -82,7 +82,7 @@ export default {
 </script>
 
 
-<style scoped>
+<style lang="scss">
 /* 页面整体样式 */
 .chatgpt-container {
   display: flex;
@@ -110,11 +110,11 @@ export default {
 }
 
 .message-container.user {
-  justify-content: flex-end;
+  justify-content: flex-end !important;
 }
 
 .message-container.bot {
-  justify-content: flex-start;
+  justify-content: flex-start !important;
 }
 
 /* 头像样式 */
@@ -144,18 +144,18 @@ img{
 }
 
 .message-container.user {
-  justify-content: flex-end;
+  justify-content: flex-end; //右侧显示用户的聊天消息
 }
 
-.message.user {
-  background-color: #0056b3 !important;
-  color: white;
+.message-container.user .message {
+  background-color: #1f86f4 !important;
+  color: white !important;
   box-shadow: 0 2px 4px rgba(0, 123, 255, 0.4);
 }
 
-.message.bot {
+.message {
   background-color: #f1f1f1 !important;
-  color: #333;
+  color: #333 !important;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 

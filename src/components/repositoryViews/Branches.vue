@@ -21,16 +21,36 @@
           </template>
         </el-table-column>
       </el-table>
+
+      <!-- 编辑文件内容的对话框 -->
+       
+      <div id="code-editor-container">
+        <el-dialog :visible.sync="isEditing" title="编辑文件内容">
+          <div ref="editor" class="code-editor"></div>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="isEditing = false">取消</el-button>
+            <el-button type="primary" @click="saveFileContent">保存</el-button>
+          </div>
+        </el-dialog>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import CodeMirror from 'codemirror/lib/codemirror';
+import 'codemirror/mode/javascript/javascript';
+import 'codemirror/lib/codemirror.css';
+
 export default {
   data() {
     return {
       files: [],
       path: '',
+      isEditing: false,
+      fileContent: '',
+      currentFile: null,
+      editor: null
     };
   },
   computed: {
@@ -71,8 +91,31 @@ export default {
         this.fetchRepoContents();
       }
     },
-    editFile(fileName) {
-      this.$router.push({ name: 'code-editor', params: { filePath: this.path + fileName } });
+    async editFile(file) {
+      try {
+        const response = await fetch(file.download_url);
+        this.fileContent = await response.text();
+        this.currentFile = file;
+        this.isEditing = true;
+        this.$nextTick(() => {
+          if (!this.editor) {
+            this.editor = CodeMirror(this.$refs.editor, {
+              value: this.fileContent,
+              mode: 'javascript',
+              lineNumbers: true
+            });
+          } else {
+            this.editor.setValue(this.fileContent);
+          }
+        });
+      } catch (error) {
+        console.error('加载文件内容失败:', error);
+      }
+    },
+    saveFileContent() {
+      this.fileContent = this.editor.getValue();
+      console.log('Saving file content:', this.fileContent);
+      this.isEditing = false;
     }
   },
   mounted() {
@@ -81,7 +124,7 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .el-icon-folder {
   color: #83cdff;
   margin-right: 5px;
@@ -120,4 +163,3 @@ export default {
 }
 
 </style>
-

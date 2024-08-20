@@ -11,35 +11,42 @@
       <el-table-column label="功能模块" width="300">
         <template slot-scope="scope">
           <div style="display: flex; justify-content: space-between; align-items: center; width:150px">
-            <el-tooltip class="item" effect="dark" content="智能问答" placement="top" open-delay="500">
+            <el-tooltip class="item" effect="dark" content="智能问答" placement="top" :open-delay="500">
               <el-button
                 icon="iconfont icon-zhinengwenda"
                 @click="handleIconClick('QnA', scope.row, $event)"
                 style="padding: 0; min-width: 32px; min-height: 32px;">
               </el-button>
             </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="代码仓库" placement="top" open-delay="500">
+            <el-tooltip class="item" effect="dark" content="代码仓库" placement="top" :open-delay="500">
               <el-button
                 icon="iconfont icon-daimacangku"
                 @click="handleIconClick('Repository', scope.row, $event)"
                 style="padding: 0; min-width: 32px; min-height: 32px;">
               </el-button>
             </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="项目协同" placement="top" open-delay="500">
+            <el-tooltip class="item" effect="dark" content="项目协同" placement="top" :open-delay="500">
               <el-button
                 icon="iconfont icon-xiangmuxietong"
                 @click="handleIconClick('Collaboration', scope.row, $event)"
                 style="padding: 0; min-width: 32px; min-height: 32px;">
               </el-button>
             </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="项目总结" placement="top" open-delay="500">
+            <el-tooltip class="item" effect="dark" content="知识管理" placement="top" :open-delay="500">
+              <el-button
+                icon="iconfont icon-zhishiku"
+                @click="handleIconClick('Knowledge', scope.row, $event)"
+                style="padding: 0; min-width: 32px; min-height: 32px;">
+              </el-button>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="项目总结" placement="top" :open-delay="500">
               <el-button
                 icon="iconfont icon-xiangmuzongjie"
                 @click="handleIconClick('Summary', scope.row, $event)"
                 style="padding: 0; min-width: 32px; min-height: 32px;">
               </el-button>
             </el-tooltip>
-              <el-tooltip class="item" effect="dark" content="项目设置" placement="top" open-delay="500">
+              <el-tooltip class="item" effect="dark" content="项目设置" placement="top" :open-delay="500">
               <el-button
                 icon="el-icon-setting"
                 @click="handleIconClick('Setting', scope.row, $event)"

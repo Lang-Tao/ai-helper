@@ -37,13 +37,25 @@ export default {
 </script>
 
 <style scoped>
-.el-menu-item.is-active {
-  margin: 0 !important; 
-  background-color: #ecf5ff;
-  color: #409EFF;
-}
 .el-menu-item {
   transition: none !important; 
   text-align: center;
+  margin:5px;
+  border-radius:8px;
+  height: 50px;
+  line-height: 50px;
+  font-size: 16px;
+  color: #54575c;
+}
+.el-menu-item:hover {
+  background-color: #eceff5; /*悬浮颜色*/
+  color: #54575c !important;
+}
+.el-menu-item.is-active { 
+  background-color: #e5ecff !important;  /*选中颜色*/
+  color: #3f6ffc !important;  /*选中文字颜色*/
+}
+.el-main{
+  padding: 0 !important;
 }
 </style>

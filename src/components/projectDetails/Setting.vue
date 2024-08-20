@@ -95,7 +95,7 @@ export default {
     },
     getProjectByAddress(address) {
       return{
-        name: "项目1",
+        name: "Lilishop 商城系统",
         address: "xiangmu1",
         admin: "管理员1",
         adminAvatar: "",

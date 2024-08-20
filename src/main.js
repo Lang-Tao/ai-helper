@@ -11,11 +11,14 @@ import "@/assets/iconfont/iconfont.js"
 
 import "@/assets/css/global.css";
 
-import {
-    getToken,
-    setToken,
-    removeToken
-} from '@/utils/auth'
+import store from './store/index.js';
+
+// 富文本编辑器
+import VueQuillEditor from 'vue-quill-editor'
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+Vue.use(VueQuillEditor)
 
 Vue.config.productionTip = false;  // 阻止产生警告
 
@@ -27,6 +30,7 @@ Vue.config.productionTip = false
 new Vue({
   
   router,
+  store,
   render: h => h(App),
   
 }).$mount('#app')

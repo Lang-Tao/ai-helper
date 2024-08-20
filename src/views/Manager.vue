@@ -18,11 +18,6 @@
             <span slot="title">审查</span>
           </el-menu-item>
 
-          <el-menu-item index="/knowledge">
-            <i class="el-icon-s-management"></i>
-            <span slot="title">知识库</span>
-          </el-menu-item>
-
           <el-menu-item index="/team">
             <i class="el-icon-user"></i>
             <span slot="title">用户/团队</span>
@@ -38,7 +33,7 @@
           <el-menu-item index="/person" style="margin-top: auto;" class="avatar-item">
             <el-dropdown placement="bottom">
               <div class="avatar-container" style="display:flex; text-align:center; justify-content: center;">
-                <img src="@/assets/img/logo1.png" alt="" class="avatar-img">
+                <img src="@/assets/img/defaultAvater.jpg" alt="" class="avatar-img">
                 <transition name="el-fade-in">
                   <span v-show="!iscollapsed" class="username">用户名</span>
                 </transition>
@@ -84,7 +79,7 @@ export default {
   name: "manager",
   data() {
     return {
-      iscollapsed: false,
+      iscollapsed: true,
       defaultActivePath: '',
       ActivePath: '',
       ProjectAddress: '',
@@ -106,7 +101,7 @@ export default {
     },
     getProjectByAddress(ProjectAddress){  // todo 根据地址获取项目信息
       return {
-        name: "项目1",
+        name: "Lilishop 商城系统",
         address: "xiangmu1",
         admin: "管理员1",
         adminAvatar: "",
@@ -163,30 +158,30 @@ export default {
   top: 0;
 }
 .el-aside {
-  background-color: #2E363F;
-  color: white;
-  overflow: hidden; /* 取消滚动条 */
+  background-color: #ffffff;
+  color: #54575c;
+  overflow: hidden; 
   transition: width 0.3s ease-in-out;
   position: fixed;
 }
 .el-menu {
-  background-color: #2E363F;
+  background-color: #fcfdfd;  /*侧边栏颜色*/
   border-right: 1px solid #E0E6ED;
   height: 100%;
-  overflow: hidden; /* 取消滚动条 */
+  overflow: hidden; 
 }
 .el-menu-item {
-  color: white;
+  color: #54575c;
   margin: 2px;
   border-radius: 4px;
 }
 .el-menu-item:hover {
-  background-color: #1C2330;
-  color: white !important;
+  background-color: #eceff5; /*悬浮颜色*/
+  color: #54575c !important;
 }
 .el-menu-item.is-active {
-  background-color: #1C2330 !important;
-  color: white !important;
+  background-color: #e5ecff !important;  /*选中颜色*/
+  color: #3f6ffc !important;  /*选中文字颜色*/
 }
 .el-main {
   padding: 0px !important;
@@ -218,13 +213,13 @@ export default {
   margin-bottom: 10px !important;
 }
 .avatar-img {
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
-  margin-right: 10px;
+  margin:0 10px 0 8px;
 }
 .username {
-  color:white;
+  color:#54575c;
   border: 0px;
   text-align:center !important; 
   margin: 4px;
@@ -246,4 +241,5 @@ export default {
 .-webkit-scrollbar {
     display: none;
 }
+
 </style>

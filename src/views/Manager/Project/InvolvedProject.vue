@@ -19,35 +19,35 @@
           </div>
           <!--常用项目卡.按钮组-->
           <div style="display: flex; justify-content: space-between; align-items: center; width:150px; margin:-7px 0 0 -12px">
-            <el-tooltip class="item" effect="dark" content="智能问答" placement="top" open-delay="500">
+            <el-tooltip class="item" effect="dark" content="智能问答" placement="top" :open-delay="500">
               <el-button
                 icon="iconfont icon-zhinengwenda"
                 @click="handleIconClick('QnA', project, $event)"
                 style="padding: 0; min-width: 32px; min-height: 32px;">
               </el-button>
             </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="代码仓库" placement="top" open-delay="500">
+            <el-tooltip class="item" effect="dark" content="代码仓库" placement="top" :open-delay="500">
               <el-button
                 icon="iconfont icon-daimacangku"
                 @click="handleIconClick('Repository', project, $event)"
                 style="padding: 0; min-width: 32px; min-height: 32px;">
               </el-button>
             </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="项目协同" placement="top" open-delay="500">
+            <el-tooltip class="item" effect="dark" content="项目协同" placement="top" :open-delay="500">
               <el-button
                 icon="iconfont icon-xiangmuxietong"
                 @click="handleIconClick('Collaboration', project, $event)"
                 style="padding: 0; min-width: 32px; min-height: 32px;">
               </el-button>
             </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="项目总结" placement="top" open-delay="500">
+            <el-tooltip class="item" effect="dark" content="项目总结" placement="top" :open-delay="500">
               <el-button
                 icon="iconfont icon-xiangmuzongjie"
                 @click="handleIconClick('Summary', project, $event)"
                 style="padding: 0; min-width: 32px; min-height: 32px;">
               </el-button>
             </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="项目设置" placement="top" open-delay="500">
+            <el-tooltip class="item" effect="dark" content="项目设置" placement="top" :open-delay="500">
               <el-button
                 icon="el-icon-setting"
                 @click="handleIconClick('Setting', project, $event)"
@@ -77,7 +77,7 @@ export default {
       return {
           involvedProject: [
             {
-              name: '项目1',
+              name: 'Lilishop 商城系统',
               address:'xiangmu1',
               admin: '管理员1',
               adminAvatar: '', 

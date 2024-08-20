@@ -8,32 +8,37 @@
         router
       >
         <el-menu-item :index="getDynamicPath('home')">
-          <i style="margin:0 10px 0 0px; font-size:18px; line-height:18px" class="iconfont icon-xiangmugailan" />
+          <i class="iconfont icon-xiangmugailan" />
           <span  slot="title">项目概览</span>
         </el-menu-item>
 
         <el-menu-item :index="getDynamicPath('QnA')">
-          <i style="margin:0 10px 0 0px; font-size:18px; line-height:18px" class="iconfont icon-zhinengwenda" />
+          <i class="iconfont icon-zhinengwenda" />
           <span slot="title">智能问答</span>
         </el-menu-item>
 
         <el-menu-item :index="getDynamicPath('Repository')">       
-          <i style="margin:0 10px 0 0px; font-size:18px; line-height:18px" class="iconfont icon-daimacangku" />
+          <i class="iconfont icon-daimacangku" />
           <span slot="title">代码仓库</span>
         </el-menu-item>
         
         <el-menu-item :index="getDynamicPath('Collaboration')">
-           <i style="margin:0 10px 0 0px; font-size:18px; line-height:18px" class="iconfont icon-xiangmuxietong" />
+           <i class="iconfont icon-xiangmuxietong" />
           <span slot="title">项目协同</span>
         </el-menu-item>
 
+        <el-menu-item :index="getDynamicPath('Knowledge')">
+          <i class="iconfont icon-zhishiku"></i>
+          <span slot="title">知识管理</span>
+        </el-menu-item>
+
         <el-menu-item :index="getDynamicPath('Summary')">
-            <i style="margin:0 10px 0 0px; font-size:18px; line-height:18px" class="iconfont icon-xiangmuzongjie" />
+            <i class="iconfont icon-xiangmuzongjie" />
           <span slot="title">项目总结</span>
         </el-menu-item>
 
         <el-menu-item :index="getDynamicPath('Setting')">
-            <i style="margin:0 10px 0 0px; font-size:18px; line-height:18px" class="iconfont icon-shezhi" />
+            <i class="iconfont icon-shezhi" />
           <span slot="title">项目设置</span>
         </el-menu-item>
       </el-menu>
@@ -70,7 +75,7 @@ export default {
   methods: {
     fetchProjectData() {
       const projectAddresss = this.$route.params.address;
-      // 根据项目ID获取项目数据，这里使用示例数据
+      // todo 根据项目地址获取项目数据，这里使用示例数据
       const projectData = {
         '1': { name: '项目1', description: '项目1的描述' },
         // 添加更多项目数据
@@ -82,13 +87,27 @@ export default {
 </script>
 
 <style scoped>
-.el-menu-item.is-active {
-  margin: 0 !important; 
-  background-color: #ecf5ff;
-  color: #409EFF;
-}
 .el-menu-item {
   transition: none !important; 
   text-align: center;
+  margin:5px;
+  border-radius:8px;
+  height: 50px;
+  line-height: 50px;
+  font-size: 16px;
+  color: #54575c;
+}
+.el-menu-item:hover {
+  background-color: #eceff5; /*悬浮颜色*/
+  color: #54575c !important;
+}
+.el-menu-item.is-active { 
+  background-color: #e5ecff !important;  /*选中颜色*/
+  color: #3f6ffc !important;  /*选中文字颜色*/
+}
+i{
+  margin:2px 10px 0 -5px; 
+  font-size:18px; 
+  line-height:18px
 }
 </style>

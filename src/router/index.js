@@ -35,21 +35,15 @@ const routes = [
             path: 'person-check',
             name: 'person-check',
             meta: { title: '审查' },
-            component: () => import('../views/Manager/Check/Person.vue')
+            component: () => import('../views/Manager/Check/PersonCheck.vue')
           },
           {
             path: 'intelligence-check',
             name: 'intelligence-check',
             meta: { title: '审查' },
-            component: () => import('../views/Manager/Check/Intelligence.vue')
+            component: () => import('../views/Manager/Check/IntelligenceCheck.vue')
           },
         ]
-      },
-      {
-        path: 'knowledge',
-        name: 'knowledge',
-        meta: { title: '知识库' },
-        component: () => import('../views/Manager/Knowledge.vue')
       },
       {
         path: 'team',
@@ -107,18 +101,12 @@ const routes = [
             meta: { title: '代码仓库' },
             props: true,
             component: () => import('../components/projectDetails/Repository.vue'),
-            children:[
-              { 
-                path: "/repo/:name", 
-                name: "RepoDetails", 
-                component:() => import('@/components/repositoryViews/RepoDetails.vue'), 
-              },
-              { 
-                path: "/repo/:name/commit/:hash", 
-                name: "CommitDetails", 
-                component:() => import('../components/repositoryViews/CommitDetails.vue'), 
-              },
-            ]
+          },
+          {
+            path: 'Repository/edit/:filePath',
+            name: 'code-editor',
+            component: () => import('../components/fileManage/CodeEditor.vue'),
+            props: true
           },
           { 
             path: 'Collaboration', 
@@ -126,6 +114,12 @@ const routes = [
             meta: { title: '项目协同' },
             props: true,
             component: () => import('../components/projectDetails/Collaboration.vue')
+          },
+          {
+            path: 'Knowledge',
+            name: 'projectKnowledge',
+            meta: { title: '知识库' },
+            component: () => import('../components/projectDetails/Knowledge.vue')
           },
           { 
             path: 'Summary', 
