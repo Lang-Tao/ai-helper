@@ -13,7 +13,7 @@
     "@vue/composition-api": "^1.7.2",
     "@wangeditor/editor": "^5.1.23",
     "@wangeditor/editor-for-vue": "^1.0.2",
-    "axios": "^1.7.3",
+    "axios": "^1.7.4",
     "bootstrap-vue": "^2.23.1",
     "codemirror": "^5.65.17",
     "core-js": "^3.8.3",
