@@ -58,8 +58,8 @@
       </el-table-column>
       <el-table-column prop="admin" label="管理员" width="200">
         <template slot-scope="scope">
-          <el-tooltip class="item" effect="dark" :content="scope.row.adminName" placement="top">
-            <el-avatar :src="scope.row.adminAvatar" size="small" />
+          <el-tooltip class="item" effect="dark" :content="scope.row.admin.name" placement="top">
+            <el-avatar :src="scope.row.admin.avatar" size="small" />
           </el-tooltip>
         </template>
       </el-table-column>
@@ -69,7 +69,7 @@
             <el-button style="margin-left: -8px" class="el-dropdown-link" size="mini" icon="el-icon-more" round></el-button>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item v-if="scope.row.isFavorite" command="cancelChangYong" :row="scope.row" icon="iconfont icon-shuqian">取消常用项目</el-dropdown-item>
-              <el-dropdown-item v-else command="setChangYong" :row="scope.row" icon="el-icon-collection-tag">设为常用项目</el-dropdown-item>
+              <el-dropdown-item v-else command="setChangYong" :row="scope.row" icon="el-icon-collection-tag" >设为常用项目</el-dropdown-item>
               <el-dropdown-item command="delete" :row="scope.row" icon="el-icon-delete" style="color:red">删除项目</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -112,6 +112,7 @@ export default {
     },
     handleDelete(row) {
       console.log("handleDelete clicked", row);
+      this.projetArray = this.projetArray.filter(item => item.address !== row.address);
       // todo 处理项目删除逻辑
       this.$message.success('删除成功');
     },
@@ -126,5 +127,12 @@ export default {
   height: 100%;
   display: flex;
   align-items: center;
+}
+
+</style>
+
+<style lang="scss">
+.iconfont.icon-shuqian{
+  color:#409EFF !important
 }
 </style>

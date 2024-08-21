@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <el-aside width="200px" style="height: 100vh;position:fixed">
       <el-menu
         :default-active="activePath"
@@ -56,33 +55,14 @@ export default {
   props: ['address'],
   data() {
     return {
-      project: {},
       activePath: `${this.$route.path.split('/').slice(0, 4).join('/')}`, 
     };
-  },
-  created() {
-    this.fetchProjectData();
-    
   },
   computed: {
       getDynamicPath() {
         return (subPath) => `/project-details/${this.$route.params.address}/${subPath}`;
     }
   },
-  watch: {
-    '$route.params.address': 'fetchProjectData',
-  },
-  methods: {
-    fetchProjectData() {
-      const projectAddresss = this.$route.params.address;
-      // todo 根据项目地址获取项目数据，这里使用示例数据
-      const projectData = {
-        '1': { name: '项目1', description: '项目1的描述' },
-        // 添加更多项目数据
-      };
-      this.project = projectData[projectAddresss] || { name: '未知项目', description: '未找到项目详情' };
-    }
-  }
 };
 </script>
 

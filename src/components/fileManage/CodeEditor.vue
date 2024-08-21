@@ -13,7 +13,8 @@
 <script>
 import { codemirror } from 'vue-codemirror';
 import 'codemirror/lib/codemirror.css';
-import 'codemirror/mode/javascript/javascript';
+
+require("codemirror/mode/clike/clike.js"); 
 
 export default {
   components: {
@@ -25,8 +26,12 @@ export default {
       isEditing: true,
       fileContent: '',
       editorOptions: {
-        mode: 'java',
-        lineNumbers: true
+        mode: 'text/x-java',
+        lineNumbers: true,
+        extraKeys: {
+          Enter: "newlineAndIndentContinueMarkdownList"
+        },
+        lineWrapping: true, // 允许自动换行
       }
     };
   },
@@ -36,7 +41,7 @@ export default {
         const response = await fetch(`https://api.github.com/repos/lilishop/lilishop/contents/${this.filePath}`);
         const fileData = await response.json();
         const content = atob(fileData.content.replace(/\n/g, ''));
-        this.fileContent = content;
+        this.fileContent = decodeURIComponent(escape(content)); // 确保UTF-8解码正确
       } catch (error) {
         console.error('加载文件内容失败:', error);
       }
@@ -66,7 +71,7 @@ export default {
     border: 1px solid #ccc;
     font-size: 14px;
     line-height: 1.5;
-    font-family: 'Monaco', 'Consolas', 'Courier New', monospace;
+    font-family: 'Monaco', 'Consolas', 'Courier New', monospace, 'Microsoft YaHei', '微软雅黑', '宋体';
   }
 }
 .editor-footer{

@@ -85,7 +85,7 @@ export default {
     handleSubmit() {
       console.log('更新:', this.project);
      
-      // todo 添加提交逻辑，例如发送到服务器
+      // todo 更新项目信息
       
       Message({
           message: '更新成功',
@@ -103,7 +103,7 @@ export default {
         accessTime: "2024-08-07",
         createTime: "2024-08-01",
         
-      }  // todo 根据地址获取项目信息
+      }  // todo 根据项目地址获取项目信息
      }
 },
 created(){

@@ -61,7 +61,7 @@
 
 
     <!--项目列表-->
-    <ProjectList v-if="involvedProject.length > 0" :projetArray="involvedProject" 
+    <ProjectList v-if="involvedProjectList.length > 0" :projetArray="involvedProjectList" 
       @add-to-favorites="addToFavorites" @remove-from-favorites="removeFromFavorites" />
     <el-empty v-else description="暂无项目"></el-empty>
   </div>
@@ -72,56 +72,61 @@ import ProjectList from '@/components/project/ProjectList.vue';
 
 export default {
   name: "",
-  components: {ProjectList},
-    data() {
-      return {
-          involvedProject: [
-            {
-              name: 'Lilishop 商城系统',
-              address:'xiangmu1',
-              admin: '管理员1',
-              adminAvatar: '', 
-              operation: '操作1',
-              isFavorite: false,
-            },
-           
-        ],
-          favoriteProjects:[],
-
-      };
-    },
+  components: { ProjectList },
+  data() {
+    return {
+      involvedProjectList: [
+        {
+          name: 'Lilishop 商城系统',
+          address: 'xiangmu1',
+          admin: '管理员1',
+          admin: '',
+          operation: '操作1',
+          isFavorite: true,
+        },
+      ],
+      favoriteProjects: [],
+    };
+  },
 
   methods: {
     addToFavorites(project) {
-      if (! this.favoriteProjects.includes(project)) {
+      if (!this.favoriteProjects.includes(project)) {
         this.favoriteProjects.push(project);
         project.isFavorite = true;
         this.$message.success('添加成功');
       }
     },
     removeFromFavorites(project) {
-      if (this.favoriteProjects.includes(project)){
+      if (this.favoriteProjects.includes(project)) {
         this.favoriteProjects.splice(this.favoriteProjects.indexOf(project), 1);
         project.isFavorite = false;
         this.$message.success('移除成功');
       }
-      
-
     },
     handleIconClick(func, row, event) {
       event.stopPropagation(); // 阻止事件冒泡
       console.log("Icon clicked:", func, row);
       this.$router.push({ name: `project${func}`, params: { address: row.address, title: row.name } });
     },
+    getProjectList() {
+      // todo 调用接口获取参与项目列表
+    },
+    setFavProjects() {
+      for (const project of this.involvedProjectList) { 
+        if (project.isFavorite) {
+          this.favoriteProjects.push(project);
+        }
+      }
+    }
   },
-  created() {
 
-  },
   mounted() {
-
+    this.getProjectList();  // 调用方法获取项目列表
+    this.setFavProjects();  // 调用方法设置常用项目
   },
-
 }
+
 
 </script>
 
@@ -160,10 +165,8 @@ export default {
 .el-card_body{
   padding: 0 !important;
 }
-
-.card-header-span:hover{
-  color: #3f9fff;
-  cursor: pointer;
+.el-card__header .card-header-span:hover{ 
+  color: #0080ff !important;
+  cursor: pointer !important;
 }
-
 </style>

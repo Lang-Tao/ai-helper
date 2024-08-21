@@ -92,7 +92,10 @@ export default {
         // 模拟登录成功并设置一个测试 token
 
         const testToken = 'your-test-token';
-        localStorage.setItem('token', testToken);
+                
+        //vuex存储用户信息
+        this.$store.commit("setToken", testToken);
+        this.$store.commit("setUser", this.user);
         
         this.$router.push('/');
         this.$message.success('登录成功');

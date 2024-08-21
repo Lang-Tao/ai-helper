@@ -69,6 +69,7 @@ export default {
     Register() {
       this.$refs['registerRef'].validate((valid) => {
         if (valid) {
+          // todo 提交用户注册信息
           // 验证通过
           // this.$request.post('/register', this.user).then(res => {
           //   if (res.code === '200') {

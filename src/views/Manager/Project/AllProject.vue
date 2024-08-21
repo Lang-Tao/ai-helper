@@ -21,7 +21,8 @@
 
 
     <!--项目列表-->
-    <ProjectList v-if="sortedAndFilteredData.length > 0" :projetArray="sortedAndFilteredData" />
+    <ProjectList v-if="sortedAndFilteredData.length > 0" :projetArray="sortedAndFilteredData" 
+      @add-to-favorites="addToFavorites" @remove-from-favorites="removeFromFavorites" />
     <el-empty v-else description="暂无项目"></el-empty>
   </div>
 </template>
@@ -54,6 +55,7 @@ export default {
           operation: "操作1",
           accessTime: "2024-08-07",
           createTime: "2024-08-01",
+          isFavorite: true,
         },
         {
           name: "项目2",
@@ -63,8 +65,9 @@ export default {
           operation: "操作2",
           accessTime: "2024-08-06",
           createTime: "2024-08-02",
+          isFavorite: true,
         },
-        // 更多项目数据
+        //  更多项目数据
       ],
     };
   },
@@ -99,10 +102,25 @@ export default {
     },
   },
   methods: {
+    getProjectList() {
+      // todo 调用接口获取所有项目列表
+    },
     toggleSortOrder() {
       this.sortOrder = this.sortOrder === "asc" ? "desc" : "asc";
       this.sortIcon = this.sortOrder === "asc" ? "iconfont icon-zhengxu" : "iconfont icon-daoxu";
     },
+    addToFavorites(project) {
+      project.isFavorite = true;
+      this.$message.success('添加成功');
+    },
+    removeFromFavorites(project) {
+      project.isFavorite = false;
+      this.$message.success('移除成功');
+    },
+    
+  },
+  mounted() {
+    this.getProjectList();
   },
 };
 </script>

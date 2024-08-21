@@ -1,7 +1,7 @@
 const { defineConfig } = require('@vue/cli-service')
 module.exports = defineConfig({
   
-  //publicPath: '', // todo 项目域名前缀
+  publicPath: '/ai-helper2/', 
   
   devServer:{
     port:7000

@@ -99,7 +99,7 @@ export default {
     toggleCollapse() {
       this.iscollapsed = !this.iscollapsed;
     },
-    getProjectByAddress(ProjectAddress){  // todo 根据地址获取项目信息
+    getProjectByAddress(ProjectAddress){  // todo 根据项目地址获取项目信息
       return {
         name: "Lilishop 商城系统",
         address: "xiangmu1",
@@ -118,7 +118,12 @@ export default {
         type: "warning",
       })
       .then(() => {
-        localStorage.removeItem('token');
+        this.$store.commit('delToken');
+        this.$store.commit('delUser');
+        this.$message({
+          type: "success",
+          message: "退出成功",
+        });
         this.$router.push("/login");
       })
       .catch(() => {});
@@ -129,14 +134,21 @@ export default {
   created() {
     this.defaultActivePath = `${this.$route.path.split('/').slice(0, 2).join('/')}`;
     this.ActivePath = `/${this.$route.path.split('/').slice(0, 2).join('/')}`;
-    this.ProjectAddress = `${this.$route.path.split('/').slice(2,3).join('/')}` ;
-     this.Project = this.getProjectByAddress(this.ProjectAddress);
+    if(this.ActivePath === '//project-details'){
+      this.ProjectAddress = `${this.$route.path.split('/').slice(2,3).join('/')}` ;
+      console.log(this.ProjectAddress);
+      this.Project = this.getProjectByAddress(this.ProjectAddress)
+    }
   },
   watch:{
     $route(to){
       this. ActivePath = `/${to.path.split('/').slice(0, 2).join('/')}`;
-      this.ProjectAddress = `${this.$route.path.split('/').slice(2,3).join('/')}` ;
-      this.Project = this.getProjectByAddress(this.ProjectAddress);
+      console.log(this.ActivePath);
+      if(this.ActivePath === '//project-details'){
+        this.ProjectAddress = `${this.$route.path.split('/').slice(2,3).join('/')}` ;
+        console.log(this.ProjectAddress);
+        this.Project = this.getProjectByAddress(this.ProjectAddress)
+      }
     }
   },
   
