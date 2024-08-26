@@ -16,7 +16,7 @@
     "axios": "^1.7.3",
     "bootstrap-vue": "^2.23.1",
     "codemirror": "^5.65.17",
-    "core-js": "^3.8.3",
+    "core-js": "^3.38.0",
     "element-ui": "^2.15.14",
     "marked": "^14.0.0",
     "pinyin": "^2.11.0",
