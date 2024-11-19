@@ -10,10 +10,12 @@
           <i style="margin:0 10px 0 0px; font-size:18px; line-height:18px" class="iconfont icon-chengyuanguanli" />
           <span slot="title">成员管理</span>
         </el-menu-item>
-        <el-menu-item index="/team/team-group">
+
+        <!-- <el-menu-item index="/team/team-group">
           <i style="margin:0 10px 0 0px; font-size:18px; line-height:18px" class="iconfont icon-24gl-userGroup" />
           <span slot="title">用户组</span>
-        </el-menu-item>
+        </el-menu-item> -->
+        
         <el-menu-item index="/team/team-permission">
           <i style="margin:0 10px 0 0px; font-size:18px; line-height:18px" class="iconfont icon-tuanduiquanxian" />
           <span slot="title">团队权限</span>

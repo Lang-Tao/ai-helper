@@ -1,8 +1,8 @@
 <template>
-  <div style="height: 100vh; display: flex; align-items: center; justify-content: center; background-color: #669fef">
-    <div style="display: flex; background-color: white; width: 50%; border-radius: 5px; overflow: hidden">
-      <div style="flex: 1">
-        <img src="@/assets/img/register.png" alt="" style="width: 100%">
+  <div class="container">
+    <div class="form-box">
+      <div style="flex: 1; display:flex; align-items: center; justify-content: center">
+        <img src="@/assets/img/login.png" alt="" style="width: 100%">
       </div>
       <div style="flex: 1; display: flex; align-items: center; justify-content: center">
         <el-form :model="user" style="width: 80%" :rules="rules" ref="registerRef">
@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import {register} from "@/api/user.js";
 
 export default {
   name: "register",
@@ -52,9 +53,11 @@ export default {
       rules: {
         username: [
           { required: true, message: '请输入账号', trigger: 'blur' },
+          { pattern: /^\S{5,16}$/ , message: '5-16个字符', trigger: "blur"},
         ],
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' },
+          { pattern: /^\S{5,16}$/ , message: '5-16个字符', trigger: "blur"},
         ],
         confirmPass: [
           { validator: validatePassword, trigger: 'blur' }
@@ -66,26 +69,53 @@ export default {
 
   },
   methods: {
-    Register() {
-      this.$refs['registerRef'].validate((valid) => {
+    async Register() {
+      this.$refs['registerRef'].validate(async (valid) => {
         if (valid) {
-          // todo 提交用户注册信息
-          // 验证通过
-          // this.$request.post('/register', this.user).then(res => {
-          //   if (res.code === '200') {
-              this.$router.push('/login')
-              this.$message.success('注册成功')
-          //   } else {
-          //     this.$message.error(res.msg)
-          //   }
-          // })
+          try {
+            // 调用封装的注册接口
+            const response = await register({
+              username: this.user.username,
+              password: this.user.password
+            });
+
+            // 根据接口响应处理逻辑
+            if (response.code === 0) {
+              this.$message.success('注册成功');
+              this.$router.push('/login'); // 注册成功后跳转到登录页面
+            } else {
+              this.$message.error(response.message || '注册失败');
+            }
+          } catch (error) {
+            this.$message.error('注册请求失败，请稍后再试');
+            console.error(error);
+          }
         }
-      })
+      });
     }
   }
 }
 </script>
 
 <style scoped>
-
+.container{
+  height: 100vh; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  background-image: url('@/assets/img/bg.jpg'); 
+  background-size: cover; 
+  background-position: center; 
+  background-repeat: no-repeat; 
+}
+.form-box{
+  display: flex; 
+  background-color: white; 
+  width: 50%; 
+  height: 400px;
+  border-radius: 5px; 
+  overflow: hidden;
+  background-color: rgba(255, 255, 255, 0.566);
+  backdrop-filter: blur(10px);
+}
 </style>

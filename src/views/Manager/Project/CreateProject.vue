@@ -35,25 +35,26 @@
 </template>
 
 <script>
-import pinyin from 'pinyin'
-   
+import pinyin from "pinyin";
+import { createProject } from "@/api/project";
+
 export default {
   name: "createProject",
   data() {
     return {
       form: {
-        name: '',
-        address:'',
-        description:'',
+        name: "",
+        address: "",
+        description: "",
+        isFavorite: false,
+        admin: this.$store.state.user.id,
       },
       rules: {
-        name: [
-          { required: true, message: '请输入项目名称', trigger: 'blur' },
-        ],
+        name: [{ required: true, message: "请输入项目名称", trigger: "blur" }],
         address: [
-          { required: true, message: '请输入项目标识', trigger: 'blur' },
+          { required: true, message: "请输入项目标识", trigger: "blur" },
         ],
-      }
+      },
     };
   },
   methods: {
@@ -64,10 +65,25 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert('submit!');
-          // todo 向后端提交表单新建项目
+          console.log(this.form);
+
+          // 调用新建项目接口
+          createProject(this.form)
+            .then((res) => {
+              console.log(res);
+              if (res.code === 0) {
+                this.$message.success("创建成功");
+                // this.$router.push({ path: "/manager/project/involved" });
+                this.$router.go(-1);
+              } else {
+                this.$message.error("创建失败");
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            });
         } else {
-          console.log('error submit!!');
+          console.log("error submit!!");
           return false;
         }
       });
@@ -77,14 +93,14 @@ export default {
       this.$refs[formName].resetFields();
     },
 
-    getPinyin(str){
+    getPinyin(str) {
       return pinyin(str, {
         style: pinyin.STYLE_NORMAL, // 设置拼音风格
-      }).join(''); // 将拼音数组转换为字符串
+      }).join(""); // 将拼音数组转换为字符串
     },
   },
   watch: {
-    'form.name'(newValue) {
+    "form.name"(newValue) {
       // 当 form.name 发生变化时,更新 form.address 的值
       this.form.address = this.getPinyin(this.form.name);
     },
@@ -93,11 +109,11 @@ export default {
 </script>
 
 <style scoped>
-.el-button{
+.el-button {
   margin-right: 5px;
 }
 
-.el-form-item__label{
+.el-form-item__label {
   font-size: 16px !important;
   font-weight: bold !important;
 }

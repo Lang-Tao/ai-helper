@@ -48,13 +48,10 @@
 <script>
 export default {
     props: ['address'],
-  name: "Home",
-  data() {
-    return {};
-  },
-   created() {
-    console.log(this.projectId);
-  },
+    name: "Home",
+    data() {
+        return {};
+    },
 };
 </script>
 

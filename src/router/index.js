@@ -16,7 +16,25 @@ const routes = [
         path: 'home',
         name: 'home',
         meta: { title: '工作台' },
-        component: () => import('../views/Manager/Home.vue')
+        component: () => import('../views/Manager/Home.vue'),
+      },
+      {
+        path: 'home-task',
+        name: 'home-task',
+        meta: { title: '工作台' },
+        component: () => import('../views/Manager/HomeTask.vue'),
+      },
+      {
+        path: 'home-project',
+        name: 'home-project',
+        meta: { title: '工作台' },
+        component: () => import('../views/Manager/HomeProject.vue'),
+      },
+      {
+        path: 'study',
+        name: 'study',
+        meta: { title: '课程进阶' },
+        component: () => import('../views/Manager/Study.vue')
       },
       {
         path: 'settings',
@@ -48,27 +66,42 @@ const routes = [
       {
         path: 'team',
         name: 'team',
-        meta: { title: '用户 / 团队' },
+        meta: { title: '团队' },
         component: () => import('../views/Manager/Team.vue'),
         redirect: '/team/team-member',
         children:[
           {
             path: 'team-member',
             name: 'team-member',
-            meta: { title: '用户 / 团队' },
+            meta: { title: '团队' },
             component: () => import('../components/team/TeamMember.vue'),
-          },
-          {
-            path: 'team-group',
-            name: 'team-group',
-            meta: { title: '用户 / 团队' },
-            component: () => import('../components/team/TeamGruop.vue'),
           },
           {
             path: 'team-permission',
             name: 'team-permission',
-            meta: { title: '用户 / 团队' },
+            meta: { title: '团队' },
             component: () => import('../components/team/TeamPermission.vue'),
+          },
+        ]
+      },
+      {
+        path: 'user',
+        name: 'user',
+        meta: { title: '事项' },
+        component: () => import('../views/Manager/Issue.vue'),
+        redirect: '/user/task',
+        children:[
+          {
+            path: 'task',
+            name: 'task',
+            meta: { title: '事项' },
+            component: () => import('../components/user/UserTask.vue'),
+          },
+          {
+            path: 'communication',
+            name: 'communication',
+            meta: { title: '事项' },
+            component: () => import('../components/user/UserCommunication.vue'),
           },
         ]
       },
@@ -76,7 +109,7 @@ const routes = [
         path: '/project-details/:address',
         name: 'ProjectDetails',
         meta: { title: '当前项目' },
-        redirect: '/project-details/:address/home',
+        redirect: '/project-details/:address/Repository',
         component: () => import('../components/project/ProjectDetail.vue'),
         props: true,
         children: [
@@ -101,13 +134,35 @@ const routes = [
             meta: { title: '代码仓库' },
             props: true,
             component: () => import('../components/projectDetails/Repository.vue'),
+            redirect: '/project-details/:address/Repository/git',
+            children:[
+              { 
+                path: 'git', 
+                name: 'repoGit',
+                props: true,
+                component: () => import('../components/repositoryViews/Git.vue')
+              },
+              { 
+                path: 'merges', 
+                name: 'repoMerge',
+                props: true,
+                component: () => import('../components/repositoryViews/MergeRequests.vue')
+              },
+              { 
+                path: 'settings', 
+                name: 'repoSettings',
+                props: true,
+                component: () => import('../components/repositoryViews/Settings.vue')
+              },
+              {
+                path: 'Repository/git/edit/:filePath',
+                name: 'code-editor',
+                component: () => import('../components/repositoryViews/CodeEditor.vue'),
+                props: true
+              },
+            ]
           },
-          {
-            path: 'Repository/edit/:filePath',
-            name: 'code-editor',
-            component: () => import('../components/fileManage/CodeEditor.vue'),
-            props: true
-          },
+          
           { 
             path: 'Collaboration', 
             name: 'projectCollaboration',
@@ -169,6 +224,12 @@ const routes = [
         name: 'create',
         meta: { title: '项目' },
         component: () => import('../views/Manager/Project/CreateProject.vue')
+      },
+      {
+        path: 'AIqna',
+        name: 'AIqna',
+        meta: { title: '智能问答' },
+        component: () => import('../views/Manager/AIQnA.vue')
       },
       {
         path: 'password',

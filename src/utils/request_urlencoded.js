@@ -3,7 +3,7 @@ import qs from 'qs';  // 用于将对象序列化为 x-www-form-urlencoded 格�
 
 // 创建 Axios 实例
 const service = axios.create({
-  baseURL: 'http://121.43.48.182:8080',  // 后端服务的基础地址
+  baseURL: 'http://121.43.48.182:8081/api',  // 后端服务的基础地址
   timeout: 5000  // 请求超时时间
 });
 

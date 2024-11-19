@@ -25,13 +25,13 @@
                 style="padding: 0; min-width: 32px; min-height: 32px;">
               </el-button>
             </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="项目协同" placement="top" :open-delay="500">
+            <!-- <el-tooltip class="item" effect="dark" content="项目协同" placement="top" :open-delay="500">
               <el-button
                 icon="iconfont icon-xiangmuxietong"
                 @click="handleIconClick('Collaboration', scope.row, $event)"
                 style="padding: 0; min-width: 32px; min-height: 32px;">
               </el-button>
-            </el-tooltip>
+            </el-tooltip> -->
             <el-tooltip class="item" effect="dark" content="知识管理" placement="top" :open-delay="500">
               <el-button
                 icon="iconfont icon-zhishiku"
@@ -58,8 +58,8 @@
       </el-table-column>
       <el-table-column prop="admin" label="管理员" width="200">
         <template slot-scope="scope">
-          <el-tooltip class="item" effect="dark" :content="scope.row.admin.name" placement="top">
-            <el-avatar :src="scope.row.admin.avatar" size="small" />
+          <el-tooltip class="item" effect="dark" :content="scope.row.admin" placement="top">
+            <el-avatar :src="scope.row.avatar || defaultAvatar" size="small" />
           </el-tooltip>
         </template>
       </el-table-column>
@@ -80,6 +80,8 @@
 </template>
 
 <script>
+import { deleteProject } from "@/api/project";
+
 export default {
   name: "ProjectList",
   props: {
@@ -88,33 +90,54 @@ export default {
       required: true,
     },
   },
+  data() {
+    return {
+      defaultAvatar:
+        "https://helperbucket.oss-cn-hangzhou.aliyuncs.com/6fd835c3-4660-44a1-925d-f962d32cbadc.png",
+    };
+  },
   methods: {
     handleCellClick(row, column, cell, event) {
-      if (column.property === 'name') {
-        this.$router.push({ name: 'ProjectDetails', params: { address: row.address, title: row.name } });
+      if (column.property === "name") {
+        this.$router.push({
+          name: "ProjectDetails",
+          params: { address: row.address, title: row.name },
+        });
         console.log("Name column clicked:", row);
       }
     },
     handleIconClick(func, row, event) {
       event.stopPropagation(); // 阻止事件冒泡
       console.log("Icon clicked:", func, row);
-      this.$router.push({ name: `project${func}`, params: { address: row.address, title: row.name } });
+      this.$router.push({
+        name: `project${func}`,
+        params: { address: row.address, title: row.name },
+      });
     },
     handleCommand(command, row) {
       console.log("Command clicked:", command, row);
-      if (command === 'delete') {
+      if (command === "delete") {
         this.handleDelete(row);
-      } else if (command === 'setChangYong') {
-        this.$emit('add-to-favorites', row);
-      } else if (command === 'cancelChangYong') {
-        this.$emit('remove-from-favorites', row);
+      } else if (command === "setChangYong") {
+        this.$emit("add-to-favorites", row);
+      } else if (command === "cancelChangYong") {
+        this.$emit("remove-from-favorites", row);
       }
     },
     handleDelete(row) {
       console.log("handleDelete clicked", row);
-      this.projetArray = this.projetArray.filter(item => item.address !== row.address);
-      // todo 处理项目删除逻辑
-      this.$message.success('删除成功');
+      this.projetArray = this.projetArray.filter(
+        (item) => item.address !== row.address
+      );
+
+      deleteProject(row.address).then((res) => {
+        console.log(res);
+        if (res.code === 0) {
+          this.$message.success("删除成功");
+        } else {
+          this.$message.error("删除失败");
+        }
+      });
     },
   },
 };
@@ -128,11 +151,13 @@ export default {
   display: flex;
   align-items: center;
 }
-
+.name-cell:hover {
+  color: #409eff;
+}
 </style>
 
 <style lang="scss">
-.iconfont.icon-shuqian{
-  color:#409EFF !important
+.iconfont.icon-shuqian {
+  color: #409eff !important;
 }
 </style>

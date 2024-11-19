@@ -6,6 +6,27 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "1305472",
+      "name": "任务",
+      "font_class": "renwu",
+      "unicode": "e63f",
+      "unicode_decimal": 58943
+    },
+    {
+      "icon_id": "15997308",
+      "name": "点评",
+      "font_class": "dianping",
+      "unicode": "e693",
+      "unicode_decimal": 59027
+    },
+    {
+      "icon_id": "18170243",
+      "name": "代码,分支,分流,分叉",
+      "font_class": "code-branch",
+      "unicode": "e993",
+      "unicode_decimal": 59795
+    },
+    {
       "icon_id": "10232796",
       "name": "知识库",
       "font_class": "zhishiku",

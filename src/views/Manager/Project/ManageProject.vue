@@ -49,7 +49,8 @@ export default {
       sortOrder: "asc",
       sortIcon: "iconfont icon-zhengxu",
       allProjectList: [
-        {                                // 测试数据，实际数据需要从后端获取
+        {
+          // 测试数据，实际数据需要从后端获取
           name: "项目2",
           address: "xiangmu2",
           admin: "管理员2",
@@ -58,7 +59,7 @@ export default {
           accessTime: "2024-08-06",
           createTime: "2024-08-02",
           isFavorite: true,
-        }, 
+        },
       ],
     };
   },
@@ -77,7 +78,7 @@ export default {
         let compareA = a[this.opt];
         let compareB = b[this.opt];
 
-        if (this.opt === 'name' || this.opt === 'admin') {
+        if (this.opt === "name" || this.opt === "admin") {
           compareA = compareA.toLowerCase();
           compareB = compareB.toLowerCase();
         }
@@ -98,20 +99,37 @@ export default {
     },
     toggleSortOrder() {
       this.sortOrder = this.sortOrder === "asc" ? "desc" : "asc";
-      this.sortIcon = this.sortOrder === "asc" ? "iconfont icon-zhengxu" : "iconfont icon-daoxu";
+      this.sortIcon =
+        this.sortOrder === "asc"
+          ? "iconfont icon-zhengxu"
+          : "iconfont icon-daoxu";
     },
     addToFavorites(project) {
       project.isFavorite = true;
-      this.$message.success('添加成功');
+      // 更改项目信息
+      updateProject(project).then((res) => {
+        if (res.code === 0) {
+          this.$message.success("添加成功");
+        } else {
+          this.$message.error(res.message || "添加失败");
+        }
+      });
     },
     removeFromFavorites(project) {
       project.isFavorite = false;
-      this.$message.success('移除成功');
+      // 更改项目信息
+      updateProject(project).then((res) => {
+        if (res.code === 0) {
+          this.$message.success("移除成功");
+        } else {
+          this.$message.error(res.message || "移除失败");
+        }
+      });
     },
   },
-  mounted(){
+  mounted() {
     this.getProjectList();
-  }
+  },
 };
 </script>
 

@@ -19,8 +19,8 @@
             </div>
             
             <div class="info-text">
-                <span class="title">repository.commitMes</span>
-                <span class="description">admin 提交于 time 前</span>
+                <span class="title">[更新]更新信息测试</span>
+                <span class="description">admin 提交于 1个月 前</span>
             </div>
         </div>
     </div>

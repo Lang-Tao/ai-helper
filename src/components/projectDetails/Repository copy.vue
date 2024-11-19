@@ -30,26 +30,28 @@ export default {
   data() {
     return {
       files: [],
-      path: '',
+      path: "",
     };
   },
   computed: {
     pathArray() {
-      return this.path.split('/').filter(folder => folder);
+      return this.path.split("/").filter((folder) => folder);
     },
     canGoBack() {
       return this.pathArray.length > 0;
-    }
+    },
   },
   methods: {
     async fetchRepoContents() {
       try {
         console.log("click file:" + this.path);
-        const response = await fetch(`https://api.github.com/repos/lilishop/lilishop/contents/${this.path}`);
+        const response = await fetch(
+          `https://api.github.com/repos/lilishop/lilishop/contents/${this.path}`
+        );
         let data = await response.json();
         this.files = this.sortFiles(data);
       } catch (error) {
-        console.error('Failed to fetch repository contents:', error);
+        console.error("Failed to fetch repository contents:", error);
       }
     },
     sortFiles(files) {
@@ -57,7 +59,7 @@ export default {
         if (a.type === b.type) {
           return a.name.localeCompare(b.name);
         }
-        return a.type === 'dir' ? -1 : 1;
+        return a.type === "dir" ? -1 : 1;
       });
     },
     openFolder(folderName) {
@@ -67,17 +69,20 @@ export default {
     goBack() {
       if (this.canGoBack) {
         this.pathArray.pop();
-        this.path = this.pathArray.join('/') + '/';
+        this.path = this.pathArray.join("/") + "/";
         this.fetchRepoContents();
       }
     },
     editFile(fileName) {
-      this.$router.push({ name: 'code-editor', params: { filePath: this.path + fileName } });
-    }
+      this.$router.push({
+        name: "code-editor",
+        params: { filePath: this.path + fileName },
+      });
+    },
   },
   mounted() {
     this.fetchRepoContents();
-  }
+  },
 };
 </script>
 
@@ -102,7 +107,7 @@ export default {
   overflow: hidden;
 }
 .file-name:hover {
-  color: #409EFF;
+  color: #409eff;
   cursor: pointer;
 }
 .header {
@@ -118,6 +123,5 @@ export default {
     height: auto !important;
   }
 }
-
 </style>
 

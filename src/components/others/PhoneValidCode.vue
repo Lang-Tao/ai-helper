@@ -36,10 +36,12 @@
       </el-form-item>
     </el-form>
   </div>
+
+
+
 </template>
  
 <script>
- 
 export default {
   name: "AppPhone",
   data() {
@@ -49,35 +51,47 @@ export default {
       // console.log(callback)
       // 判断输入框中是否输入手机号
       if (!value) {
-        callback(new Error('手机号不能为空'))
+        callback(new Error("手机号不能为空"));
       }
       //正则表达式进行验证手机号，从1开始，第二位是35789中的任意一位，以9数字结尾
       if (!/^1[35789]\d{9}$/.test(value)) {
-        callback(new Error('手机号格式不正确'))
+        callback(new Error("手机号格式不正确"));
       }
-      callback()
-    }
+      callback();
+    };
     return {
       btnTxt: "获取验证码",
       // 是否禁用  即点击之后一段时间内无法再点击
       disabled: false,
       time: 0,
       form: {
-        CellPhone: '',
-        VerificationCode: '',
+        CellPhone: "",
+        VerificationCode: "",
       },
       rules: {
         CellPhone: [
-          { required: true, trigger: 'blur', message: '请输入11位手机号'},
-          { required: true, trigger: 'blur', min: 11, max: 11, message: '长度不符合'},
-          { required: true, trigger: 'blur', validator: validatePhone}
+          { required: true, trigger: "blur", message: "请输入11位手机号" },
+          {
+            required: true,
+            trigger: "blur",
+            min: 11,
+            max: 11,
+            message: "长度不符合",
+          },
+          { required: true, trigger: "blur", validator: validatePhone },
         ],
         VerificationCode: [
-          { required: true, trigger: 'blur', message: '请输入4位验证码'},
-          { required: true, trigger: 'blur', min: 6, max: 6,message: '验证码错误'}
+          { required: true, trigger: "blur", message: "请输入4位验证码" },
+          {
+            required: true,
+            trigger: "blur",
+            min: 6,
+            max: 6,
+            message: "验证码错误",
+          },
         ],
-      }
-    }
+      },
+    };
   },
   methods: {
     //获取手机验证码方法
@@ -86,8 +100,8 @@ export default {
       if (!this.form.CellPhone) {
         //号码校验不通过
         this.$message({
-          message: '请输入手机号',
-          type:'warning',
+          message: "请输入手机号",
+          type: "warning",
         });
         //正则判断 从1开始，第二位是35789中的任意一位，以9数字结尾
       } else if (!/1[35789]\d{9}/.test(this.form.CellPhone)) {
@@ -100,19 +114,19 @@ export default {
         // 封装的axios接口
         GetPhone({
           CellPhone: this.form.CellPhone,
-        }) .then(({data}) => {
+        }).then(({ data }) => {
           if (data.code === 200) {
             this.$message({
-              message: '验证成功',
-              type: 'success',
-            })
+              message: "验证成功",
+              type: "success",
+            });
           } else {
             this.$message({
-              message: '发送失败',
-              type: 'warning',
-            })
+              message: "发送失败",
+              type: "warning",
+            });
           }
-        })
+        });
       }
     },
     // 倒计时方法
@@ -130,22 +144,22 @@ export default {
     },
     // 提交按钮
     submit() {
-      this.getCode(({data}) => {
+      this.getCode(({ data }) => {
         if (data.code === 200) {
-          this.$router.push('/')
+          this.$router.push("/");
         } else {
-          this.$message.error(data.data.rules.message)
+          this.$message.error(data.data.rules.message);
         }
-      })
-    }
-  }
-}
+      });
+    },
+  },
+};
 </script>
  
 <style lang="less" scoped>
 .login-container {
   width: 450px;
-  border:1px solid #eaeaea;
+  border: 1px solid #eaeaea;
   margin: 180px auto;
   padding: 35px 35px 15px 35px;
   border-radius: 15px;
@@ -157,7 +171,7 @@ export default {
     border: 0px;
     border-bottom: 1px solid;
   }
-   .el-button {
+  .el-button {
     border: 0px;
     margin: -80px;
     .span {
@@ -180,5 +194,4 @@ export default {
     width: 50px;
   }
 }
- 
 </style>

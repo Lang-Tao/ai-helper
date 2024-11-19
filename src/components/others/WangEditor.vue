@@ -89,9 +89,11 @@ export default Vue.extend({
             if (this.editor) {
                 const content = this.editor.getHtml();
                 console.log("Saving note with content:", content);
-                this.Note.content = content;
-            }
-            this.$emit('saveNote', this.Note);
+                if(this.Note.content !== content){
+                    this.Note.content = content;
+                    this.$emit('saveNote', this.Note);
+                }
+            }  
         },
     },
     beforeDestroy() {

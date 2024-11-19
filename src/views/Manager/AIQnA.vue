@@ -12,8 +12,10 @@
         <div v-if="message.type === 'bot'" class="avatar">
           <img src="@/assets/img/AIlogo.png" alt="bot-avatar" class="avatar-image">
         </div>
+        
         <div class="message">
-          <span>{{ message.content }}</span>
+          <vue-markdown :source="message.content" v-highlight>
+          </vue-markdown>
         </div>
       </div>
     </div>
@@ -42,70 +44,49 @@
 </template>
 
 <script>
-import axios from 'axios';
+import { askBot } from "@/api/bot";
 
 export default {
   data() {
     return {
-      userInput: '',
-      messages: [
-        { type: 'bot', content: '你好！有什么我可以帮你的吗?' }
-      ],
-      isProcessing: false  // 标志变量，用于跟踪机器人是否正在处理中
+      userInput: "",
+      messages: [{ type: "bot", content: "你好！有什么我可以帮你的吗?" }],
+      isProcessing: false, // 标志变量，用于跟踪机器人是否正在处理中
     };
   },
   mounted() {
-    document.querySelector('input').focus()
+    document.querySelector("input").focus();
   },
   methods: {
     async sendMessage() {
-      if (this.userInput.trim() === '' || this.isProcessing) return;  // 如果为空或正在处理则返回
+      if (this.userInput.trim() === "" || this.isProcessing) return; // 如果为空或正在处理则返回
 
-      this.messages.push({ type: 'user', content: this.userInput });
+      this.messages.push({ type: "user", content: this.userInput });
       const userMessage = this.userInput;
-      this.userInput = '';
-      this.isProcessing = true;  // 标记为处理中
+      this.userInput = "";
+      this.isProcessing = true; // 标记为处理中
 
       try {
-        const response = await axios.post('https://api.coze.cn/v3/chat', {
-          header: {
-            "Authorization" : "Bearer pat_7LS9oDkDR2kLxmxR9NDztW9u6Y6Wr6GUmWCOSuIbu5sh16qy0fCFSQhHgJPcNke4",
-            "Content-Type" : "application/json"
-          },
-          data: {
-              "bot_id": "7401422954770612243",
-              "user_id": "123",
-              "stream": false,
-              "auto_save_history": true,
-              "additional_messages": [
-                  {
-                      "role": "user",
-                      "content": "今天杭州天气如何",
-                      "content_type": "text"
-                  }
-              ]
-          }
-        });
+        const response = await askBot(userMessage);
 
-        // 假设API返回的消息内容在response.data中
+        console.log(response);
+
         this.messages.push({
-          type: 'bot',
-          content: response.data  // 你需要根据实际的API返回格式调整
+          type: "bot",
+          content: response.choices[0].message.content,
         });
-        console.log(response.data);
-        
       } catch (error) {
-        console.error('Error occurred:', error);
+        console.error("Error occurred:", error);
         this.messages.push({
-          type: 'bot',
-          content: '抱歉，我暂时无法处理您的请求。'
+          type: "bot",
+          content: "抱歉，我暂时无法处理您的请求。",
         });
       } finally {
-        this.isProcessing = false;  // 处理完成，标记为未处理
-        this.$refs.userInputRef.$el.querySelector('input').focus();
+        this.isProcessing = false; // 处理完成，标记为未处理
+        this.$refs.userInputRef.$el.querySelector("input").focus();
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -115,7 +96,10 @@ export default {
   display: flex;
   flex-direction: column;
   height: 780px;
-  background-color: #eceff1;
+  background-image: url("@/assets/img/home_bg.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   padding: 20px;
 }
 
@@ -163,7 +147,7 @@ img {
 /* 消息样式 */
 .message {
   max-width: 60%;
-  padding: 15px;
+  padding: 0 15px;
   border-radius: 15px;
   font-size: 14px;
   line-height: 1.5;

@@ -46,6 +46,22 @@ export default {
 }
 .el-menu-item {
   font-size: 16px;
+  margin-right:5px;
+}
+
+.el-menu-item::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 0;
+  height: 2px;
+  background-color: #409eff;
+  transition: width 0.3s ease;
+}
+
+.el-menu-item:hover::after {
+  width: 100%;
 }
 
 .createBtn {

@@ -1,123 +1,72 @@
 <template>
-  <div style="display:flex; justify-content:center">
-    <div class="repository">
+  <div style="overflow-x:hidden" >
       <!-- 头部栏 -->
       <div class="header">
-        <el-button icon="el-icon-arrow-left" @click="goBack" :disabled="!canGoBack">返回</el-button>
+        <span class="repository-name"> Lilishop 商城系统</span>
+        <el-menu style="display:flex; padding-left: 20px; " :default-active="$route.path" router class="el-menu-demo" mode="horizontal">
+          <el-menu-item :index="`/project-details/${address}/Repository/git`"><i class="iconfont icon-code"></i>代码</el-menu-item>
+          <el-menu-item :index="`/project-details/${address}/Repository/merges`"><i class="iconfont icon-hebingqingqiu"></i>合并请求</el-menu-item>
+          <el-menu-item :index="`/project-details/${address}/Repository/settings`"><i class="iconfont icon-shezhi"></i>设置</el-menu-item>
+        </el-menu>
       </div>
-
-      <!-- 文件和文件夹展示 -->
-      <el-table :data="files" :show-header="false" style="width: 100%">
-        <el-table-column label="">
-          <template slot-scope="scope">
-            <el-icon v-if="scope.row.type === 'dir'" class="el-icon-folder">
-              <i class="el-icon-folder"></i>
-            </el-icon>
-            <el-icon v-if="scope.row.type === 'file'" class="el-icon-document">
-              <i class="el-icon-document"></i>
-            </el-icon>
-            <span class="file-name" v-if="scope.row.type === 'dir'" @click="openFolder(scope.row.name)" style="cursor:pointer">{{ scope.row.name }}</span>
-            <span class="file-name" v-if="scope.row.type === 'file'" @click="editFile(scope.row.name)" style="cursor:pointer">{{ scope.row.name }}</span>
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
+      <!--内容栏-->
+      <div style="background-color: #fafbfc; padding-top:5px; ">
+        <router-view/>
+      </div>
   </div>
 </template>
 
 <script>
 export default {
+  props: ['address'],
   data() {
-    return {
-      files: [],
-      path: '',
-    };
+    return {};
   },
-  computed: {
-    pathArray() {
-      return this.path.split('/').filter(folder => folder);
-    },
-    canGoBack() {
-      return this.pathArray.length > 0;
-    }
-  },
-  methods: {
-    async fetchRepoContents() {
-      try {
-        console.log("click file:" + this.path);
-        const response = await fetch(`https://api.github.com/repos/lilishop/lilishop/contents/${this.path}`);
-        let data = await response.json();
-        this.files = this.sortFiles(data);
-      } catch (error) {
-        console.error('Failed to fetch repository contents:', error);
-      }
-    },
-    sortFiles(files) {
-      return files.sort((a, b) => {
-        if (a.type === b.type) {
-          return a.name.localeCompare(b.name);
-        }
-        return a.type === 'dir' ? -1 : 1;
-      });
-    },
-    openFolder(folderName) {
-      this.path += `${folderName}/`;
-      this.fetchRepoContents();
-    },
-    goBack() {
-      if (this.canGoBack) {
-        this.pathArray.pop();
-        this.path = this.pathArray.join('/') + '/';
-        this.fetchRepoContents();
-      }
-    },
-    editFile(fileName) {
-      this.$router.push({ name: 'code-editor', params: { filePath: this.path + fileName } });
-    }
-  },
-  mounted() {
-    this.fetchRepoContents();
-  }
+  
 };
 </script>
 
 <style scoped lang="scss">
-.el-icon-folder {
-  color: #83cdff;
-  margin-right: 5px;
-}
-.el-icon-document {
-  color: #1f1f1f;
-  margin-right: 5px;
-}
-.repository {
-  width: 100%;
-  margin: 20px;
-  background-color: #ffffff;
-  border: #b1b1b18f solid 0.5px;
-  border-radius: 15px;
+.header {
+  height: 130px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  overflow: hidden;
+  justify-content:space-evenly;
+  padding: 0;
+  background-color: #fafbfc;
 }
-.file-name:hover {
-  color: #409EFF;
-  cursor: pointer;
+.el-menu {
+  width: 1500px;
+  padding: 0 0 0 40px;
+  border-bottom: 1px solid #dbdbdba2;
+  background-color: #fafbfc;
+  box-shadow: 0 1px 2px 0px rgba(90, 90, 90, 0.1)
 }
-.header {
-  display: flex;
-  justify-content: flex-start;
-  padding: 10px;
-  background-color: #f5f5f5;
-  border-bottom: 1px solid #dcdcdc;
+.el-menu-item {
+  height: 50px;
+  font-size: 15px;
+  margin:0 10px;
+  background-color: #fafbfc;
+  
 }
-#code-editor-container {
-  .CodeMirror {
-    overflow: hidden !important;
-    height: auto !important;
-  }
+.el-menu-item:hover{
+  font-weight: bold;
+  background-color: #fafbfc !important;
 }
-
+.el-menu-item.is-active{
+  font-weight: bold;
+  background-color: #fafbfc !important;
+}
+.iconfont{
+  margin:0 5px;
+}
+.el-menu-item:hover i{
+  color:black;
+}
+.repository-name{
+  margin-left: 40px;
+  margin-top: 20px;
+  font-size: 20px;
+}
 </style>
 

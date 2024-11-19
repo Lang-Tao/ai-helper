@@ -20,7 +20,25 @@ import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
 Vue.use(VueQuillEditor)
 
-Vue.config.productionTip = false;  // 阻止产生警告
+// echarts
+import ECharts from "echarts";
+Vue.prototype.$echarts = ECharts;
+
+// 代码显示
+
+// 引入使代码行高亮的插件
+import Highlight from "@/plugins/hightlight-plugins"
+// 引入vue-markdown
+import VueMarkdown from "vue-markdown"
+
+
+// 将vue-markdown注册为全局组件
+Vue.component("vue-markdown",  VueMarkdown)
+Vue.use(Highlight);
+
+
+// 阻止产生警告
+Vue.config.productionTip = false;  
 
 Vue.use(ElementUI);
 

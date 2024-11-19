@@ -1,10 +1,9 @@
 <template>
-  <div style="height: 100vh; display: flex; align-items: center; justify-content: center; background-color: #19c499">
-    <div style="display: flex; background-color: white; width: 50%; border-radius: 5px; overflow: hidden">
-
-      <div style="flex: 1; display: flex; align-items: center; justify-content: center">
+  <div class="login-container">
+    <div class="login-form">
+      <div class="form-content">
         <el-form :model="user" style="width: 80%" :rules="rules" ref="loginRef">
-          <div style="font-size: 20px; font-weight: bold; text-align: center; margin-bottom: 20px">欢迎登录智能工程助手</div>
+          <div class="form-title">欢迎登录智能工程助手</div>
           <el-form-item prop="username">
             <el-input prefix-icon="el-icon-user" size="medium" placeholder="请输入账号" v-model="user.username"></el-input>
           </el-form-item>
@@ -12,9 +11,9 @@
             <el-input prefix-icon="el-icon-lock" size="medium" show-password placeholder="请输入密码" v-model="user.password"></el-input>
           </el-form-item>
           <el-form-item prop="code">
-            <div style="display: flex">
+            <div class="code-input">
               <el-input placeholder="请输入验证码" prefix-icon="el-icon-circle-check" size="medium" style="flex: 1" v-model="user.code"></el-input>
-              <div style="flex: 1; height: 36px">
+              <div class="valid-code">
                 <valid-code @update:value="getCode" />
               </div>
             </div>
@@ -22,24 +21,23 @@
           <el-form-item>
             <el-button type="primary" style="width: 100%" @click="login">登 录</el-button>
           </el-form-item>
-          <div style="display: flex">
-            <div style="flex: 1">还没有账号？请 <span style="color: #0f9876; cursor: pointer" @click="$router.push('/register')">注册</span></div>
-            <div style="flex: 1; text-align: right"><span style="color: #0f9876; cursor: pointer">忘记密码</span></div>
+          <div class="register-link">
+            <div>还没有账号？请 <span class="register" @click="$router.push('/register')">注册</span></div>
           </div>
         </el-form>
       </div>
 
-      <div style="flex: 1">
+      <div class="form-image">
         <img src="@/assets/img/login.png" alt="" style="width: 100%">
       </div>
-
+      
     </div>
-
   </div>
 </template>
 
 <script>
 import ValidCode from "@/components/others/ValidCode";
+import { login } from "@/api/user";
 
 export default {
   name: "login",
@@ -47,7 +45,6 @@ export default {
     ValidCode
   },
   data() {
-
     // 验证码校验
     const validateCode = (rule, value, callback) => {
       if (value === '') {
@@ -79,42 +76,103 @@ export default {
       }
     }
   },
-  created() {
-
-  },
+  created() {},
   methods: {
     getCode(code) {
       this.code = code.toLowerCase()
     },
-    login() {
-    this.$refs['loginRef'].validate((valid) => {
-      if (valid) {  // 验证通过
-        // 模拟登录成功并设置一个测试 token
+    async login() {
+      this.$refs['loginRef'].validate(async (valid) => {
+        if (valid) {
+          try {
+            // 调用封装的登录接口
+            const response = await login({
+              username: this.user.username,
+              password: this.user.password
+            });
 
-        const testToken = 'your-test-token';
-                
-        //vuex存储用户信息
-        this.$store.commit("setToken", testToken);
-        this.$store.commit("setUser", this.user);
-        
-        this.$router.push('/');
-        this.$message.success('登录成功');
-
-        // todo 验证登录信息
-        // this.$request.post('/login', this.user).then(res => {
-        //   if (res.code === '200') {
-        //     localStorage.setItem("honey-user", JSON.stringify(res.data));  // 存储用户数据
-        //   } else {
-        //     this.$message.error(res.msg);
-        //   }
-        // });
-      }
-    });
+            // 根据接口响应处理逻辑
+            if (response.code === 0) {
+              console.log(response);
+              this.$store.commit("setToken", response.data.jwt);  // vuex 储存 token
+              this.$store.commit("setUser", response.data.user);    // vuex 储存 用户信息
+              this.$router.push('/');
+              this.$message.success('登录成功');
+            } else {
+              this.$message.error(response.message || '登录失败');
+            }
+          } catch (error) {
+            this.$message.error('登录请求失败，请稍后再试');
+            console.error(error);
+          }
+        }
+      });
     }
   }
 }
 </script>
 
 <style scoped>
+.login-container {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url('@/assets/img/bg.jpg'); 
+  background-size: cover; 
+  background-position: center; 
+  background-repeat: no-repeat; 
+}
 
+.login-form {
+  display: flex;
+  background-color: white;
+  width: 50%;
+  height: 400px;
+  border-radius: 5px;
+  overflow: hidden;
+  background-color: rgba(255, 255, 255, 0.566);
+  backdrop-filter: blur(10px);
+}
+
+.form-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0px;
+}
+
+.form-title {
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.code-input {
+  display: flex;
+}
+
+.valid-code {
+  flex: 1;
+  height: 36px;
+}
+
+.register-link {
+  display: flex;
+}
+
+.register {
+  color: #0f9876;
+  cursor: pointer;
+}
+
+.form-image {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
 </style>

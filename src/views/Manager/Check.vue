@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <el-aside width="200px" style="height: 100vh;position:fixed">
+  <div class="container">
+    <el-aside width="200px" style="height: 100vh;position:fixed;box-shadow: 2px 0 6px rgba(0, 21, 41, 0.073);">
       <el-menu
         :default-active="activePath"
         style="height: 100vh;"
@@ -17,7 +17,7 @@
       </el-menu>
     </el-aside>
 
-    <el-main style="padding: 0 20px; margin-left: 200px;">
+    <el-main>
       <router-view/>
     </el-main>
   </div>
@@ -37,6 +37,12 @@ export default {
 </script>
 
 <style scoped>
+.container{
+  background-image: url('@/assets/img/home_bg.jpg'); 
+  background-size: cover; 
+  background-position: center; 
+  background-repeat: no-repeat; 
+}
 .el-menu-item {
   transition: none !important; 
   text-align: center;
@@ -56,6 +62,7 @@ export default {
   color: #3f6ffc !important;  /*选中文字颜色*/
 }
 .el-main{
-  padding: 0 !important;
+  padding: 0 ; 
+  margin-left: 200px;
 }
 </style>

@@ -12,7 +12,7 @@
         <el-card shadow="hover" v-for="(project, index) in favoriteProjects" :key="index" class="project-item">
           <!--常用项目卡.header-->
           <div slot='header'  >
-            <span class="card-header-span" @click="handleIconClick('Home', project, $event)" style="font-size: 14px;  color: #657694; line-height: 24px; ">
+            <span class="card-header-span" @click="handleIconClick('Repository', project, $event)" style="font-size: 14px;  color: #657694; line-height: 24px; ">
                {{ project.name.length > 8 ? project.name.substring(0, 8) + '...' : project.name }} 
             </span>
             <el-button style="margin-left:5px" icon="iconfont icon-shuqian" type="text" @click="removeFromFavorites(project)"></el-button>
@@ -33,10 +33,10 @@
                 style="padding: 0; min-width: 32px; min-height: 32px;">
               </el-button>
             </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="项目协同" placement="top" :open-delay="500">
+            <el-tooltip class="item" effect="dark" content="知识管理" placement="top" :open-delay="500">
               <el-button
-                icon="iconfont icon-xiangmuxietong"
-                @click="handleIconClick('Collaboration', project, $event)"
+                icon="iconfont icon-zhishiku"
+                @click="handleIconClick('Knowledge', project, $event)"
                 style="padding: 0; min-width: 32px; min-height: 32px;">
               </el-button>
             </el-tooltip>
@@ -68,23 +68,15 @@
 </template>
 
 <script>
-import ProjectList from '@/components/project/ProjectList.vue';
+import ProjectList from "@/components/project/ProjectList.vue";
+import { getProjectList, updateProject } from "@/api/project";
 
 export default {
   name: "",
   components: { ProjectList },
   data() {
     return {
-      involvedProjectList: [
-        {
-          name: 'Lilishop 商城系统',
-          address: 'xiangmu1',
-          admin: '管理员1',
-          admin: '',
-          operation: '操作1',
-          isFavorite: true,
-        },
-      ],
+      involvedProjectList: [],
       favoriteProjects: [],
     };
   },
@@ -92,80 +84,102 @@ export default {
   methods: {
     addToFavorites(project) {
       if (!this.favoriteProjects.includes(project)) {
-        this.favoriteProjects.push(project);
         project.isFavorite = true;
-        this.$message.success('添加成功');
+        // 更改项目信息
+        updateProject(project).then((res) => {
+          console.log(res);
+          console.log(project);
+
+          if (res.code === 0) {
+            this.$message.success("添加成功");
+            this.favoriteProjects.push(project);
+          } else {
+            this.$message.error("添加失败");
+          }
+        });
       }
     },
     removeFromFavorites(project) {
       if (this.favoriteProjects.includes(project)) {
-        this.favoriteProjects.splice(this.favoriteProjects.indexOf(project), 1);
         project.isFavorite = false;
-        this.$message.success('移除成功');
+        // 更改项目信息
+        updateProject(project).then((res) => {
+          console.log(res);
+          console.log(project);
+
+          if (res.code === 0) {
+            this.$message.success("移除成功");
+            this.favoriteProjects.splice(
+              this.favoriteProjects.indexOf(project)
+            );
+          } else {
+            this.$message.error("移除失败");
+          }
+        });
       }
     },
     handleIconClick(func, row, event) {
       event.stopPropagation(); // 阻止事件冒泡
       console.log("Icon clicked:", func, row);
-      this.$router.push({ name: `project${func}`, params: { address: row.address, title: row.name } });
+      this.$router.push({
+        name: `project${func}`,
+        params: { address: row.address, title: row.name },
+      });
     },
+
+    // 调用接口获取参与项目列表
     getProjectList() {
-      // todo 调用接口获取参与项目列表
-    },
-    setFavProjects() {
-      for (const project of this.involvedProjectList) { 
-        if (project.isFavorite) {
-          this.favoriteProjects.push(project);
+      getProjectList().then((res) => {
+        this.involvedProjectList = res.data;
+
+        // 将isFavorite为true的项目添加到favoriteProjects数组中
+        for (const project of this.involvedProjectList) {
+          if (project.isFavorite) {
+            this.favoriteProjects.push(project);
+          }
         }
-      }
-    }
+      });
+    },
   },
 
   mounted() {
-    this.getProjectList();  // 调用方法获取项目列表
-    this.setFavProjects();  // 调用方法设置常用项目
+    this.getProjectList(); // 调用方法获取项目列表
   },
-}
-
-
+};
 </script>
 
 <style scoped>
-.el-empty{
+.el-empty {
   margin-top: 150px;
 }
-.title{
+.title {
   font-size: 18px;
   font-weight: 600;
   margin: 20px;
-
 }
-.el-card{
- 
+.el-card {
   display: flex;
   justify-content: center;
   align-content: center;
-  flex-direction: column;;
+  flex-direction: column;
   background-color: #fff;
   margin: 10px 20px;
   border-radius: 10px;
-
-
 }
-.noProjects{
+.noProjects {
   width: 480px;
   height: 160px;
 }
 
-.project-item{
+.project-item {
   width: 224px;
   height: 118px;
 }
 
-.el-card_body{
+.el-card_body {
   padding: 0 !important;
 }
-.el-card__header .card-header-span:hover{ 
+.el-card__header .card-header-span:hover {
   color: #0080ff !important;
   cursor: pointer !important;
 }

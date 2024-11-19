@@ -9,7 +9,7 @@ const store = new Vuex.Store({
   state: {
     // 存储token
     token:"",
-    user:{} // 可选
+    user:{} 
   },
 
   getters: {
@@ -37,14 +37,18 @@ const store = new Vuex.Store({
     delUser(state, user) {
       state.user = {};
       console.log('用户信息删除');
+    },
+    updateUser(state, user) {
+      // 更新 state
+      state.user = user;
     }
   },
 
- actions: {
+  actions: {
    // removeToken: (context) => {
      // context.commit('setToken')
    // }
- },
+   },
 });
   
 export default store;

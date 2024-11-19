@@ -1,12 +1,25 @@
 <template>
   <el-container>
     <el-aside width="200px">
-      <el-input v-model="search" suffix-icon="el-icon-search" placeholder="搜索笔记"></el-input>
+      <el-input
+        v-model="search"
+        suffix-icon="el-icon-search"
+        placeholder="搜索笔记"></el-input>
 
       <div>
-        <span style="margin:0 40px 0 23px">页面目录</span>
-        <el-button class="add-btn" type="primary" icon="el-icon-plus" size="mini" @click="addNote"></el-button>
-        <el-button class="add-btn" type="primary" icon="el-icon-folder-add" size="mini" @click="addFolder"></el-button>
+        <span style="margin: 0 40px 0 23px">页面目录</span>
+        <el-button
+          class="add-btn"
+          type="primary"
+          icon="el-icon-plus"
+          size="mini"
+          @click="addNote"></el-button>
+        <el-button
+          class="add-btn"
+          type="primary"
+          icon="el-icon-folder-add"
+          size="mini"
+          @click="addFolder"></el-button>
       </div>
 
       <el-divider></el-divider>
@@ -17,9 +30,12 @@
         node-key="id"
         default-expand-all
         :props="{
-            children: 'children',
-            label: item => item.title.length > 8 ? item.title.substring(0, 8) + '...' : item.title
-          }"
+          children: 'children',
+          label: (item) =>
+            item.title.length > 8
+              ? item.title.substring(0, 8) + '...'
+              : item.title,
+        }"
         :render-content="renderContent"
         draggable
         :allow-drop="allowDrop"
@@ -29,18 +45,29 @@
     </el-aside>
 
     <el-main v-if="selectedNote">
-      <WangEditor :Note="selectedNote" :key="selectedNote.id" @saveNote="saveNote" />
+      <WangEditor
+        ref="wangEditor"
+        :Note="selectedNote"
+        :key="selectedNote.id"
+        @saveNote="saveNote" />
     </el-main>
-    
+
     <el-main v-else class="intro-main">
       <span>欢迎使用知识管理</span>
-      <span class="intro-text">知识库可以用来记录整个项目的来龙去脉，展示项目的当前状态，同时保存项目的相关资料，<br>能够让项目成员更好的进行文档书写和协作。</span>
+      <span class="intro-text"
+        >知识库可以用来记录整个项目的来龙去脉，展示项目的当前状态，同时保存项目的相关资料，<br />能够让项目成员更好的进行文档书写和协作。</span
+      >
     </el-main>
   </el-container>
 </template>
 
 <script>
-import WangEditor from '../others/WangEditor.vue';
+import WangEditor from "../others/WangEditor.vue";
+import {
+  createNoteFolder,
+  deleteNoteFolder,
+  getNoteList,
+} from "../../api/note";
 
 export default {
   components: {
@@ -48,46 +75,20 @@ export default {
   },
   data() {
     return {
-      currentName: '',
-      search: '',
+      currentName: "",
+      search: "",
       selectedNote: null,
-      noteList: [
-        {
-          title: "笔记1",
-          id: 1,
-          folder: null,
-          content: "这是笔记1的内容"
-        },
-        {
-          title: "笔记笔记笔记记记记",
-          id: 2,
-          folder: null,
-          content: "这是笔记2的内容"
-        },
-        {
-          title: "文件夹1",
-          id: 3,
-          isFolder: true,
-          children: [
-            {
-              title: "子笔记1",
-              id: 4,
-              folder: 3,
-              content: "这是子笔记1的内容"
-            }
-          ]
-        }
-      ],
+      noteList: [],
       editorOptions: {
-        theme: 'snow',
+        theme: "snow",
         modules: {
           toolbar: [
-            [{ 'header': [1, 2, false] }],
-            ['bold', 'italic', 'underline'],
-            ['image', 'code-block']
-          ]
-        }
-      }
+            [{ header: [1, 2, false] }],
+            ["bold", "italic", "underline"],
+            ["image", "code-block"],
+          ],
+        },
+      },
     };
   },
   computed: {
@@ -96,12 +97,20 @@ export default {
         return this.noteList;
       }
       return this.filterNotes(this.noteList, this.search.toLowerCase());
-    }
+    },
   },
   methods: {
+    // 获取笔记列表
+    getNoteList() {
+      getNoteList().then((res) => {
+        console.log(res);
+        this.noteList = res.data;
+      });
+    },
+
     filterNotes(notes, searchTerm) {
       return notes
-        .map(note => {
+        .map((note) => {
           if (note.children) {
             const children = this.filterNotes(note.children, searchTerm);
             if (children.length) {
@@ -113,13 +122,19 @@ export default {
           }
           return null;
         })
-        .filter(note => note !== null);
+        .filter((note) => note !== null);
     },
+
     handleNodeClick(data) {
+      if (this.selectedNote && this.$refs.wangEditor) {
+        this.$refs.wangEditor.saveNote();
+      }
       if (!data.isFolder) {
         this.selectedNote = { ...data };
       }
     },
+
+    // 保存笔记
     saveNote(Note) {
       if (!Note) return;
       const target = this.findNoteById(this.noteList, Note.id);
@@ -128,10 +143,11 @@ export default {
         target.title = Note.title;
       }
       this.$message({
-        message: '笔记保存成功',
-        type: 'success'
+        message: "笔记保存成功",
+        type: "success",
       });
     },
+
     findNoteById(noteList, noteId) {
       for (const note of noteList) {
         if (note.id === noteId) {
@@ -146,20 +162,38 @@ export default {
       }
       return null;
     },
+
+    // 新建笔记
     addNote() {
       this.noteList.push({ title: "未命名页面", id: Date.now() });
       this.$message({
-        message: '添加成功',
-        type: 'success'
+        message: "添加成功",
+        type: "success",
       });
     },
+
+    // 新建文件夹
     addFolder() {
-      this.noteList.push({ title: "未命名文件夹", isFolder: true, id: Date.now(), children: [] });
+      this.noteList.push({
+        title: "未命名文件夹",
+        isFolder: true,
+        id: Date.now(),
+        children: [],
+      });
+      const data = {
+        title: "未命名文件夹",
+        projectId: this.$route.params.id,
+      };
+      createNoteFolder(data).then((res) => {
+        console.log(res);
+      });
       this.$message({
-        message: '添加成功',
-        type: 'success'
+        message: "添加成功",
+        type: "success",
       });
     },
+
+    // 删除笔记
     deleteNode(data) {
       const removeNode = (nodes, id) => {
         for (let i = 0; i < nodes.length; i++) {
@@ -172,96 +206,101 @@ export default {
           }
         }
       };
-      this.$confirm('此操作将永久删除该笔记, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        removeNode(this.noteList, data.id);
-        this.$message({
-          type: 'success',
-          message: '删除成功!'
-        });
-      }).catch(() => {});
+      this.$confirm("此操作将永久删除该笔记, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          removeNode(this.noteList, data.id);
+          this.$message({
+            type: "success",
+            message: "删除成功!",
+          });
+        })
+        .catch(() => {});
     },
+
     renderContent(h, { node, data }) {
-      return h('span', [
-        h('span', { class: 'custom-tree-node' }, [
-          h('span', {
+      return h("span", [
+        h("span", { class: "custom-tree-node" }, [
+          h("span", {
             domProps: {
-              innerHTML: data.isEdit ? '' : node.label
+              innerHTML: data.isEdit ? "" : node.label,
             },
             on: {
-              dblclick: () => this.headerDbClick(data)
-            }
+              dblclick: () => this.headerDbClick(data),
+            },
           }),
-          h('input', {
+          h("input", {
             directives: [
               {
-                name: 'show',
-                value: data.isEdit
-              }
+                name: "show",
+                value: data.isEdit,
+              },
             ],
             ref: data.id,
             attrs: {
-              placeholder: '请输入内容'
+              placeholder: "请输入内容",
             },
             domProps: {
-              value: this.currentName
+              value: this.currentName,
             },
             on: {
-              blur: (event) => this.handleInputBlur(event, data)
-            }
-          })
+              blur: (event) => this.handleInputBlur(event, data),
+            },
+          }),
         ]),
-        h('el-button', {
+        h("el-button", {
           attrs: {
-            icon: 'el-icon-delete',
-            type: 'text'
+            icon: "el-icon-delete",
+            type: "text",
           },
           on: {
-            click: () => this.deleteNode(data)
-          }
-        })
+            click: () => this.deleteNode(data),
+          },
+        }),
       ]);
     },
+
     headerDbClick(data) {
       this.currentName = data.title;
-      this.$set(data, 'isEdit', true);
+      this.$set(data, "isEdit", true);
       this.$nextTick(() => {
         this.$refs[data.id] && this.$refs[data.id].focus();
       });
     },
+
     handleInputBlur(event, data) {
       const inputName = event.target.value.trim();
-      if (inputName === '') {
+      if (inputName === "") {
         this.$message({
-          type: 'warning',
-          message: '分类名称不能为空,请重新输入'
+          type: "warning",
+          message: "分类名称不能为空,请重新输入",
         });
-        this.$set(data, 'isEdit', false);
+        this.$set(data, "isEdit", false);
       } else if (inputName === data.title) {
-        this.$set(data, 'isEdit', false);
+        this.$set(data, "isEdit", false);
       } else {
-        this.$set(data, 'isEdit', false);
+        this.$set(data, "isEdit", false);
         data.title = inputName;
       }
-      this.currentName = '';
+      this.currentName = "";
     },
     allowDrop(draggingNode, dropNode, type) {
-      return type !== 'inner' || dropNode.data.isFolder;
+      return type !== "inner" || dropNode.data.isFolder;
     },
     handleDrop(draggingNode, dropNode, type) {
       const data = draggingNode.data;
       const parent = dropNode.data;
-      if (type === 'inner' && parent.isFolder) {
+      if (type === "inner" && parent.isFolder) {
         parent.children.push(data);
         this.removeNode(this.noteList, data.id);
-      } else if (type === 'before' || type === 'after') {
+      } else if (type === "before" || type === "after") {
         this.removeNode(this.noteList, data.id);
         const parentArray = this.findParentArray(this.noteList, parent.id);
-        const index = parentArray.findIndex(item => item.id === parent.id);
-        if (type === 'before') {
+        const index = parentArray.findIndex((item) => item.id === parent.id);
+        if (type === "before") {
           parentArray.splice(index, 0, data);
         } else {
           parentArray.splice(index + 1, 0, data);
@@ -290,8 +329,13 @@ export default {
         }
       }
       return null;
-    }
-  }
+    },
+  },
+
+  // 初始化获取笔记列表
+  mounted() {
+    this.getNoteList();
+  },
 };
 </script>
 
@@ -299,13 +343,13 @@ export default {
 .el-aside {
   background-color: rgba(255, 255, 255, 0.151);
   height: 100% !important;
-  border-right: .5px solid rgba(0, 0, 0, 0.1);
+  border-right: 0.5px solid rgba(0, 0, 0, 0.1);
   position: fixed;
 }
 
 .el-main {
   margin-left: 200px;
-  padding:0;
+  padding: 0;
   height: calc(100vh - 60px) !important;
   overflow-y: auto;
 }
@@ -326,20 +370,20 @@ export default {
   border-radius: 50%;
   background-color: #00000000;
   border: none;
-  color: #000000
+  color: #000000;
 }
 
 .el-button.add-btn:hover {
   transform: scale(1.1);
-  transition: .5s;
+  transition: 0.5s;
 }
 
 .el-divider {
   margin: 0;
   margin-top: 2px;
-  opacity: .5;
+  opacity: 0.5;
   width: 90%;
-  margin-left: 5%
+  margin-left: 5%;
 }
 
 .el-dropdown-link {
@@ -375,31 +419,31 @@ export default {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  
+
   font-size: 30px;
   color: #373737;
 }
-.intro-text{
-  font-size: 14px; 
-  color: #999999; 
-  margin-top: 20px; 
-  text-align:center;
+.intro-text {
+  font-size: 14px;
+  color: #999999;
+  margin-top: 20px;
+  text-align: center;
   line-height: 28px;
 }
-.quill-editor{
-  height: max(500px,auto) !important;
-  margin:10px;
-  border:none
+.quill-editor {
+  height: max(500px, auto) !important;
+  margin: 10px;
+  border: none;
 }
-.save-btn{
-  margin-top:10px;
+.save-btn {
+  margin-top: 10px;
   margin-right: 10px;
-  float:right;
+  float: right;
 }
 </style>
 
 <style>
-.el-icon-delete{
+.el-icon-delete {
   margin: 5px;
 }
 .el-tree-node__content {

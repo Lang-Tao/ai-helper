@@ -1,5 +1,6 @@
 <template>
   <div class="chatgpt-container">
+
     <!-- 聊天窗口 -->
     <div class="chat-window">
       <div 
@@ -9,10 +10,12 @@
         :class="message.type"
       >
         <div v-if="message.type === 'bot'" class="avatar">
-          <img src="@/assets/img/logo1.png" alt="bot-avatar" class="avatar-image">
+          <img src="@/assets/img/AIlogo.png" alt="bot-avatar" class="avatar-image">
         </div>
+        
         <div class="message">
-          <span>{{ message.content }}</span>
+          <vue-markdown :source="message.content" v-highlight>
+          </vue-markdown>
         </div>
       </div>
     </div>
@@ -40,47 +43,52 @@
   </div>
 </template>
 
-
 <script>
+import { askBot } from "@/api/bot";
+
 export default {
   data() {
     return {
-      userInput: '',
-      messages: [
-        { type: 'bot', content: '你好！有什么我可以帮你的吗?' }
-      ],
-      isProcessing: false  // 标志变量，用于跟踪机器人是否正在处理中
+      userInput: "",
+      messages: [{ type: "bot", content: "你好！有什么我可以帮你的吗?" }],
+      isProcessing: false, // 标志变量，用于跟踪机器人是否正在处理中
     };
   },
   mounted() {
-   document.querySelector('input').focus()
-     },
+    document.querySelector("input").focus();
+  },
   methods: {
-    sendMessage() {
-      if (this.userInput.trim() === '' || this.isProcessing) return;  // 如果为空或正在处理则返回
+    async sendMessage() {
+      if (this.userInput.trim() === "" || this.isProcessing) return; // 如果为空或正在处理则返回
 
-      this.messages.push({ type: 'user', content: this.userInput });
+      this.messages.push({ type: "user", content: this.userInput });
       const userMessage = this.userInput;
-      this.userInput = '';
-      this.isProcessing = true;  // 标记为处理中
+      this.userInput = "";
+      this.isProcessing = true; // 标记为处理中
 
-      // 模拟AI机器人响应
-      setTimeout(() => {
+      try {
+        const response = await askBot(userMessage);
+
+        console.log(response);
+
         this.messages.push({
-          type: 'bot',
-          content: `You said: "${userMessage}". How can I help further?`
+          type: "bot",
+          content: response.choices[0].message.content,
         });
-        this.isProcessing = false;  // 处理完成，标记为未处理
-
-        // 自动对焦到输入框
-        this.$refs.userInputRef.$el.querySelector('input').focus();
-      }, 1000);
-    }
-  }
+      } catch (error) {
+        console.error("Error occurred:", error);
+        this.messages.push({
+          type: "bot",
+          content: "抱歉，我暂时无法处理您的请求。",
+        });
+      } finally {
+        this.isProcessing = false; // 处理完成，标记为未处理
+        this.$refs.userInputRef.$el.querySelector("input").focus();
+      }
+    },
+  },
 };
-
 </script>
-
 
 <style lang="scss">
 /* 页面整体样式 */
@@ -88,7 +96,10 @@ export default {
   display: flex;
   flex-direction: column;
   height: 780px;
-  background-color: #eceff1;
+  background-image: url("@/assets/img/home_bg.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   padding: 20px;
 }
 
@@ -122,8 +133,8 @@ export default {
   margin-right: 10px; /* 用户头像距离消息的间距 */
 }
 
-img{
-  border:solid 1px #ccc;
+img {
+  border: solid 1px #ccc;
   border-radius: 50%;
 }
 
@@ -136,7 +147,7 @@ img{
 /* 消息样式 */
 .message {
   max-width: 60%;
-  padding: 15px;
+  padding: 0 15px;
   border-radius: 15px;
   font-size: 14px;
   line-height: 1.5;

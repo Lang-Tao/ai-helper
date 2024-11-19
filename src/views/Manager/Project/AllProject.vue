@@ -29,6 +29,7 @@
 
 <script>
 import ProjectList from "@/components/project/ProjectList.vue";
+import { getProjectList, updateProject } from "@/api/project";
 
 export default {
   name: "allproject",
@@ -46,35 +47,13 @@ export default {
       opt: "accessTime",
       sortOrder: "asc",
       sortIcon: "iconfont icon-zhengxu",
-      tableData: [
-        {
-          name: "项目1",
-          address: "xiangmu1",
-          admin: "管理员1",
-          adminAvatar: "",
-          operation: "操作1",
-          accessTime: "2024-08-07",
-          createTime: "2024-08-01",
-          isFavorite: true,
-        },
-        {
-          name: "项目2",
-          address: "xiangmu2",
-          admin: "管理员2",
-          adminAvatar: "",
-          operation: "操作2",
-          accessTime: "2024-08-06",
-          createTime: "2024-08-02",
-          isFavorite: true,
-        },
-        //  更多项目数据
-      ],
+      projectData: [],
     };
   },
   computed: {
     sortedAndFilteredData() {
       const query = this.query.toLowerCase();
-      let filteredData = this.tableData.filter((item) => {
+      let filteredData = this.projectData.filter((item) => {
         return (
           item.name.toLowerCase().includes(query) ||
           item.address.toLowerCase().includes(query) ||
@@ -86,7 +65,7 @@ export default {
         let compareA = a[this.opt];
         let compareB = b[this.opt];
 
-        if (this.opt === 'name' || this.opt === 'admin') {
+        if (this.opt === "name" || this.opt === "admin") {
           compareA = compareA.toLowerCase();
           compareB = compareB.toLowerCase();
         }
@@ -103,21 +82,49 @@ export default {
   },
   methods: {
     getProjectList() {
-      // todo 调用接口获取所有项目列表
+      getProjectList()
+        .then((res) => {
+          console.log(res);
+          if (res.code === 0) {
+            this.projectData = res.data;
+          } else {
+            console.error(res.message || "Failed to fetch project list");
+          }
+        })
+        .catch((err) => {
+          console.error("Error:", err);
+        });
     },
+
     toggleSortOrder() {
       this.sortOrder = this.sortOrder === "asc" ? "desc" : "asc";
-      this.sortIcon = this.sortOrder === "asc" ? "iconfont icon-zhengxu" : "iconfont icon-daoxu";
+      this.sortIcon =
+        this.sortOrder === "asc"
+          ? "iconfont icon-zhengxu"
+          : "iconfont icon-daoxu";
     },
     addToFavorites(project) {
       project.isFavorite = true;
-      this.$message.success('添加成功');
+      // 更改项目信息
+      updateProject(project).then((res) => {
+        if (res.code === 0) {
+          this.$message.success("添加成功");
+        } else {
+          this.$message.error(res.message || "添加失败");
+        }
+      });
     },
     removeFromFavorites(project) {
       project.isFavorite = false;
-      this.$message.success('移除成功');
+      // 更改项目信息
+      updateProject(project).then((res) => {
+        if (res.code === 0) {
+          this.$message.success("移除成功");
+        } else {
+          this.$message.error(res.message || "移除失败");
+        }
+      });
     },
-    
   },
   mounted() {
     this.getProjectList();
