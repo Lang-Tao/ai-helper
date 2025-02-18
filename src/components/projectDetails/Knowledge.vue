@@ -64,400 +64,408 @@
 <script>
 import WangEditor from "../others/WangEditor.vue";
 import {
-  createNoteFolder,
-  deleteNoteFolder,
-  getNoteList,
+	createNoteFolder,
+	deleteNoteFolder,
+	getNoteList,
 } from "../../api/note";
 
 export default {
-  components: {
-    WangEditor,
-  },
-  data() {
-    return {
-      currentName: "",
-      search: "",
-      selectedNote: null,
-      noteList: [],
-      editorOptions: {
-        theme: "snow",
-        modules: {
-          toolbar: [
-            [{ header: [1, 2, false] }],
-            ["bold", "italic", "underline"],
-            ["image", "code-block"],
-          ],
-        },
-      },
-    };
-  },
-  computed: {
-    filteredNotes() {
-      if (!this.search) {
-        return this.noteList;
-      }
-      return this.filterNotes(this.noteList, this.search.toLowerCase());
-    },
-  },
-  methods: {
-    // 获取笔记列表
-    getNoteList() {
-      getNoteList().then((res) => {
-        console.log(res);
-        this.noteList = res.data;
-      });
-    },
+	components: {
+		WangEditor,
+	},
+	data() {
+		return {
+			currentName: "",
+			search: "",
+			selectedNote: null,
+			noteList: [],
+			editorOptions: {
+				theme: "snow",
+				modules: {
+					toolbar: [
+						[{ header: [1, 2, false] }],
+						["bold", "italic", "underline"],
+						["image", "code-block"],
+					],
+				},
+			},
+		};
+	},
+	computed: {
+		filteredNotes() {
+			if (!this.search) {
+				return this.noteList;
+			}
+			return this.filterNotes(this.noteList, this.search.toLowerCase());
+		},
+	},
+	methods: {
+		// 获取笔记列表
+		getNoteList() {
+			getNoteList().then((res) => {
+				console.log(res);
+				this.noteList = res.data;
+			});
+		},
 
-    filterNotes(notes, searchTerm) {
-      return notes
-        .map((note) => {
-          if (note.children) {
-            const children = this.filterNotes(note.children, searchTerm);
-            if (children.length) {
-              return { ...note, children };
-            }
-          }
-          if (note.title.toLowerCase().includes(searchTerm)) {
-            return { ...note };
-          }
-          return null;
-        })
-        .filter((note) => note !== null);
-    },
+		filterNotes(notes, searchTerm) {
+			return notes
+				.map((note) => {
+					if (note.children) {
+						const children = this.filterNotes(
+							note.children,
+							searchTerm
+						);
+						if (children.length) {
+							return { ...note, children };
+						}
+					}
+					if (note.title.toLowerCase().includes(searchTerm)) {
+						return { ...note };
+					}
+					return null;
+				})
+				.filter((note) => note !== null);
+		},
 
-    handleNodeClick(data) {
-      if (this.selectedNote && this.$refs.wangEditor) {
-        this.$refs.wangEditor.saveNote();
-      }
-      if (!data.isFolder) {
-        this.selectedNote = { ...data };
-      }
-    },
+		handleNodeClick(data) {
+			if (this.selectedNote && this.$refs.wangEditor) {
+				this.$refs.wangEditor.saveNote();
+			}
+			if (!data.isFolder) {
+				this.selectedNote = { ...data };
+			}
+		},
 
-    // 保存笔记
-    saveNote(Note) {
-      if (!Note) return;
-      const target = this.findNoteById(this.noteList, Note.id);
-      if (target) {
-        target.content = Note.content;
-        target.title = Note.title;
-      }
-      this.$message({
-        message: "笔记保存成功",
-        type: "success",
-      });
-    },
+		// 保存笔记
+		saveNote(Note) {
+			if (!Note) return;
+			const target = this.findNoteById(this.noteList, Note.id);
+			if (target) {
+				target.content = Note.content;
+				target.title = Note.title;
+			}
+			this.$message({
+				message: "笔记保存成功",
+				type: "success",
+			});
+		},
 
-    findNoteById(noteList, noteId) {
-      for (const note of noteList) {
-        if (note.id === noteId) {
-          return note;
-        }
-        if (note.children) {
-          const found = this.findNoteById(note.children, noteId);
-          if (found) {
-            return found;
-          }
-        }
-      }
-      return null;
-    },
+		findNoteById(noteList, noteId) {
+			for (const note of noteList) {
+				if (note.id === noteId) {
+					return note;
+				}
+				if (note.children) {
+					const found = this.findNoteById(note.children, noteId);
+					if (found) {
+						return found;
+					}
+				}
+			}
+			return null;
+		},
 
-    // 新建笔记
-    addNote() {
-      this.noteList.push({ title: "未命名页面", id: Date.now() });
-      this.$message({
-        message: "添加成功",
-        type: "success",
-      });
-    },
+		// 新建笔记
+		addNote() {
+			this.noteList.push({ title: "未命名页面", id: Date.now() });
+			this.$message({
+				message: "添加成功",
+				type: "success",
+			});
+		},
 
-    // 新建文件夹
-    addFolder() {
-      this.noteList.push({
-        title: "未命名文件夹",
-        isFolder: true,
-        id: Date.now(),
-        children: [],
-      });
-      const data = {
-        title: "未命名文件夹",
-        projectId: this.$route.params.id,
-      };
-      createNoteFolder(data).then((res) => {
-        console.log(res);
-      });
-      this.$message({
-        message: "添加成功",
-        type: "success",
-      });
-    },
+		// 新建文件夹
+		addFolder() {
+			this.noteList.push({
+				title: "未命名文件夹",
+				isFolder: true,
+				id: Date.now(),
+				children: [],
+			});
+			const data = {
+				title: "未命名文件夹",
+				projectId: this.$route.params.id,
+			};
+			createNoteFolder(data).then((res) => {
+				console.log(res);
+			});
+			this.$message({
+				message: "添加成功",
+				type: "success",
+			});
+		},
 
-    // 删除笔记
-    deleteNode(data) {
-      const removeNode = (nodes, id) => {
-        for (let i = 0; i < nodes.length; i++) {
-          if (nodes[i].id === id) {
-            nodes.splice(i, 1);
-            return;
-          }
-          if (nodes[i].children) {
-            removeNode(nodes[i].children, id);
-          }
-        }
-      };
-      this.$confirm("此操作将永久删除该笔记, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-      })
-        .then(() => {
-          removeNode(this.noteList, data.id);
-          this.$message({
-            type: "success",
-            message: "删除成功!",
-          });
-        })
-        .catch(() => {});
-    },
+		// 删除笔记
+		deleteNode(data) {
+			const removeNode = (nodes, id) => {
+				for (let i = 0; i < nodes.length; i++) {
+					if (nodes[i].id === id) {
+						nodes.splice(i, 1);
+						return;
+					}
+					if (nodes[i].children) {
+						removeNode(nodes[i].children, id);
+					}
+				}
+			};
+			this.$confirm("此操作将永久删除该笔记, 是否继续?", "提示", {
+				confirmButtonText: "确定",
+				cancelButtonText: "取消",
+				type: "warning",
+			})
+				.then(() => {
+					removeNode(this.noteList, data.id);
+					this.$message({
+						type: "success",
+						message: "删除成功!",
+					});
+				})
+				.catch(() => {});
+		},
 
-    renderContent(h, { node, data }) {
-      return h("span", [
-        h("span", { class: "custom-tree-node" }, [
-          h("span", {
-            domProps: {
-              innerHTML: data.isEdit ? "" : node.label,
-            },
-            on: {
-              dblclick: () => this.headerDbClick(data),
-            },
-          }),
-          h("input", {
-            directives: [
-              {
-                name: "show",
-                value: data.isEdit,
-              },
-            ],
-            ref: data.id,
-            attrs: {
-              placeholder: "请输入内容",
-            },
-            domProps: {
-              value: this.currentName,
-            },
-            on: {
-              blur: (event) => this.handleInputBlur(event, data),
-            },
-          }),
-        ]),
-        h("el-button", {
-          attrs: {
-            icon: "el-icon-delete",
-            type: "text",
-          },
-          on: {
-            click: () => this.deleteNode(data),
-          },
-        }),
-      ]);
-    },
+		renderContent(h, { node, data }) {
+			return h("span", [
+				h("span", { class: "custom-tree-node" }, [
+					h("span", {
+						domProps: {
+							innerHTML: data.isEdit ? "" : node.label,
+						},
+						on: {
+							dblclick: () => this.headerDbClick(data),
+						},
+					}),
+					h("input", {
+						directives: [
+							{
+								name: "show",
+								value: data.isEdit,
+							},
+						],
+						ref: data.id,
+						attrs: {
+							placeholder: "请输入内容",
+						},
+						domProps: {
+							value: this.currentName,
+						},
+						on: {
+							blur: (event) => this.handleInputBlur(event, data),
+						},
+					}),
+				]),
+				h("el-button", {
+					attrs: {
+						icon: "el-icon-delete",
+						type: "text",
+					},
+					on: {
+						click: () => this.deleteNode(data),
+					},
+				}),
+			]);
+		},
 
-    headerDbClick(data) {
-      this.currentName = data.title;
-      this.$set(data, "isEdit", true);
-      this.$nextTick(() => {
-        this.$refs[data.id] && this.$refs[data.id].focus();
-      });
-    },
+		headerDbClick(data) {
+			this.currentName = data.title;
+			this.$set(data, "isEdit", true);
+			this.$nextTick(() => {
+				this.$refs[data.id] && this.$refs[data.id].focus();
+			});
+		},
 
-    handleInputBlur(event, data) {
-      const inputName = event.target.value.trim();
-      if (inputName === "") {
-        this.$message({
-          type: "warning",
-          message: "分类名称不能为空,请重新输入",
-        });
-        this.$set(data, "isEdit", false);
-      } else if (inputName === data.title) {
-        this.$set(data, "isEdit", false);
-      } else {
-        this.$set(data, "isEdit", false);
-        data.title = inputName;
-      }
-      this.currentName = "";
-    },
-    allowDrop(draggingNode, dropNode, type) {
-      return type !== "inner" || dropNode.data.isFolder;
-    },
-    handleDrop(draggingNode, dropNode, type) {
-      const data = draggingNode.data;
-      const parent = dropNode.data;
-      if (type === "inner" && parent.isFolder) {
-        parent.children.push(data);
-        this.removeNode(this.noteList, data.id);
-      } else if (type === "before" || type === "after") {
-        this.removeNode(this.noteList, data.id);
-        const parentArray = this.findParentArray(this.noteList, parent.id);
-        const index = parentArray.findIndex((item) => item.id === parent.id);
-        if (type === "before") {
-          parentArray.splice(index, 0, data);
-        } else {
-          parentArray.splice(index + 1, 0, data);
-        }
-      }
-    },
-    removeNode(nodes, id) {
-      for (let i = 0; i < nodes.length; i++) {
-        if (nodes[i].id === id) {
-          nodes.splice(i, 1);
-          return;
-        }
-        if (nodes[i].children) {
-          this.removeNode(nodes[i].children, id);
-        }
-      }
-    },
-    findParentArray(nodes, id) {
-      for (let i = 0; i < nodes.length; i++) {
-        if (nodes[i].id === id) {
-          return nodes;
-        }
-        if (nodes[i].children) {
-          const result = this.findParentArray(nodes[i].children, id);
-          if (result) return result;
-        }
-      }
-      return null;
-    },
-  },
+		handleInputBlur(event, data) {
+			const inputName = event.target.value.trim();
+			if (inputName === "") {
+				this.$message({
+					type: "warning",
+					message: "分类名称不能为空,请重新输入",
+				});
+				this.$set(data, "isEdit", false);
+			} else if (inputName === data.title) {
+				this.$set(data, "isEdit", false);
+			} else {
+				this.$set(data, "isEdit", false);
+				data.title = inputName;
+			}
+			this.currentName = "";
+		},
+		allowDrop(draggingNode, dropNode, type) {
+			return type !== "inner" || dropNode.data.isFolder;
+		},
+		handleDrop(draggingNode, dropNode, type) {
+			const data = draggingNode.data;
+			const parent = dropNode.data;
+			if (type === "inner" && parent.isFolder) {
+				parent.children.push(data);
+				this.removeNode(this.noteList, data.id);
+			} else if (type === "before" || type === "after") {
+				this.removeNode(this.noteList, data.id);
+				const parentArray = this.findParentArray(
+					this.noteList,
+					parent.id
+				);
+				const index = parentArray.findIndex(
+					(item) => item.id === parent.id
+				);
+				if (type === "before") {
+					parentArray.splice(index, 0, data);
+				} else {
+					parentArray.splice(index + 1, 0, data);
+				}
+			}
+		},
+		removeNode(nodes, id) {
+			for (let i = 0; i < nodes.length; i++) {
+				if (nodes[i].id === id) {
+					nodes.splice(i, 1);
+					return;
+				}
+				if (nodes[i].children) {
+					this.removeNode(nodes[i].children, id);
+				}
+			}
+		},
+		findParentArray(nodes, id) {
+			for (let i = 0; i < nodes.length; i++) {
+				if (nodes[i].id === id) {
+					return nodes;
+				}
+				if (nodes[i].children) {
+					const result = this.findParentArray(nodes[i].children, id);
+					if (result) return result;
+				}
+			}
+			return null;
+		},
+	},
 
-  // 初始化获取笔记列表
-  mounted() {
-    this.getNoteList();
-  },
+	// 初始化获取笔记列表
+	// mounted() {
+	//   this.getNoteList();
+	// },
 };
 </script>
 
 <style scoped lang="scss">
 .el-aside {
-  background-color: rgba(255, 255, 255, 0.151);
-  height: 100% !important;
-  border-right: 0.5px solid rgba(0, 0, 0, 0.1);
-  position: fixed;
+	background-color: rgba(255, 255, 255, 0.151);
+	height: 100% !important;
+	border-right: 0.5px solid rgba(0, 0, 0, 0.1);
+	position: fixed;
 }
 
 .el-main {
-  margin-left: 200px;
-  padding: 0;
-  height: calc(100vh - 60px) !important;
-  overflow-y: auto;
+	margin-left: 200px;
+	padding: 0;
+	height: calc(100vh - 60px) !important;
+	overflow-y: auto;
 }
 
 .el-input {
-  margin: 10px;
-  width: 180px;
-  height: 30px;
-  line-height: 20px;
+	margin: 10px;
+	width: 180px;
+	height: 30px;
+	line-height: 20px;
 }
 
 .el-button.add-btn {
-  margin: 10px 5px 5px;
-  padding: 5px;
-  height: 26px;
-  line-height: 16px;
-  font-size: 14px;
-  border-radius: 50%;
-  background-color: #00000000;
-  border: none;
-  color: #000000;
+	margin: 10px 5px 5px;
+	padding: 5px;
+	height: 26px;
+	line-height: 16px;
+	font-size: 14px;
+	border-radius: 50%;
+	background-color: #00000000;
+	border: none;
+	color: #000000;
 }
 
 .el-button.add-btn:hover {
-  transform: scale(1.1);
-  transition: 0.5s;
+	transform: scale(1.1);
+	transition: 0.5s;
 }
 
 .el-divider {
-  margin: 0;
-  margin-top: 2px;
-  opacity: 0.5;
-  width: 90%;
-  margin-left: 5%;
+	margin: 0;
+	margin-top: 2px;
+	opacity: 0.5;
+	width: 90%;
+	margin-left: 5%;
 }
 
 .el-dropdown-link {
-  margin: -3.5px 10px 0 10px;
-  padding: 0 5px 0 7px;
-  height: 20px;
-  line-height: 10px;
-  width: 40px;
-  border: none;
-  visibility: hidden;
+	margin: -3.5px 10px 0 10px;
+	padding: 0 5px 0 7px;
+	height: 20px;
+	line-height: 10px;
+	width: 40px;
+	border: none;
+	visibility: hidden;
 }
 
 .el-dropdown-item {
-  height: 40px;
-  line-height: 40px;
+	height: 40px;
+	line-height: 40px;
 }
 
 .el-dropdown-menu {
-  padding: 0;
+	padding: 0;
 }
 
 .custom-tree-node {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 }
 
 .el-button {
-  margin-left: 10px;
+	margin-left: 10px;
 }
 .intro-main {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
 
-  font-size: 30px;
-  color: #373737;
+	font-size: 30px;
+	color: #373737;
 }
 .intro-text {
-  font-size: 14px;
-  color: #999999;
-  margin-top: 20px;
-  text-align: center;
-  line-height: 28px;
+	font-size: 14px;
+	color: #999999;
+	margin-top: 20px;
+	text-align: center;
+	line-height: 28px;
 }
 .quill-editor {
-  height: max(500px, auto) !important;
-  margin: 10px;
-  border: none;
+	height: max(500px, auto) !important;
+	margin: 10px;
+	border: none;
 }
 .save-btn {
-  margin-top: 10px;
-  margin-right: 10px;
-  float: right;
+	margin-top: 10px;
+	margin-right: 10px;
+	float: right;
 }
 </style>
 
 <style>
 .el-icon-delete {
-  margin: 5px;
+	margin: 5px;
 }
 .el-tree-node__content {
-  height: 40px;
-  margin: 5px;
-  border-radius: 8px;
+	height: 40px;
+	margin: 5px;
+	border-radius: 8px;
 }
 
 .el-tree-node__content:hover {
-  background-color: #f2f4f6;
+	background-color: #f2f4f6;
 }
 
 .el-tree--highlight-current .el-tree-node.is-current > .el-tree-node__content {
-  background-color: #ebf3ff !important;
-  color: #06f;
+	background-color: #ebf3ff !important;
+	color: #06f;
 }
 </style>

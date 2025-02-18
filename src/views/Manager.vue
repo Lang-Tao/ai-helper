@@ -110,241 +110,244 @@
 import { getProjectInfo } from "@/api/project";
 
 export default {
-  name: "manager",
-  data() {
-    return {
-      defaultActivePath: "",
-      ActivePath: "",
-      ProjectAddress: "",
-      Project: {},
-      isLoading: false,
-    };
-  },
-  computed: {
-    currentPageTitle() {
-      return this.$route.meta.title || "未命名页面";
-    },
-  },
-  methods: {
-    getProjectByAddress(ProjectAddress) {
-      getProjectInfo(ProjectAddress).then((res) => {
-        this.isLoading = true; // 开始加载
-        console.log("地址" + ProjectAddress + "获取到项目：");
-        console.log(res);
-        if (res.code == 0) {
-          this.Project.name = res.data.name;
-          this.isLoading = false; // 加载完成
-        } else {
-          this.$message.error("获取失败");
-        }
-      });
-    },
+	name: "manager",
+	data() {
+		return {
+			defaultActivePath: "",
+			ActivePath: "",
+			ProjectAddress: "",
+			Project: {},
+			isLoading: false,
+		};
+	},
+	computed: {
+		currentPageTitle() {
+			return this.$route.meta.title || "未命名页面";
+		},
+	},
+	methods: {
+		getProjectByAddress(ProjectAddress) {
+			getProjectInfo(ProjectAddress).then((res) => {
+				this.isLoading = true; // 开始加载
+				console.log("地址" + ProjectAddress + "获取到项目：");
+				console.log(res);
+				if (res.code == 0) {
+					this.Project.name = res.data.name;
+					this.isLoading = false; // 加载完成
+				} else {
+					this.$message.error("获取失败");
+				}
+			});
+		},
 
-    logout() {
-      this.$confirm("确定退出登录吗？", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-      })
-        .then(() => {
-          this.$store.commit("delToken");
-          this.$store.commit("delUser");
-          this.$message({
-            type: "success",
-            message: "退出成功",
-          });
-          this.$router.push("/login");
-        })
-        .catch(() => {});
-    },
-  },
-  created() {
-    this.defaultActivePath = `${this.$route.path
-      .split("/")
-      .slice(0, 2)
-      .join("/")}`;
-    this.ActivePath = `/${this.$route.path.split("/").slice(0, 2).join("/")}`;
-    if (this.ActivePath === "//project-details") {
-      this.ProjectAddress = `${this.$route.path
-        .split("/")
-        .slice(2, 3)
-        .join("/")}`;
-      console.log(this.ProjectAddress);
-      this.getProjectByAddress(this.ProjectAddress);
-    }
-  },
-  watch: {
-    $route(to) {
-      this.ActivePath = `/${to.path.split("/").slice(0, 2).join("/")}`;
-      console.log(this.ActivePath);
-      if (this.ActivePath === "//project-details") {
-        this.ProjectAddress = `${this.$route.path
-          .split("/")
-          .slice(2, 3)
-          .join("/")}`;
-        console.log(this.ProjectAddress);
-        this.getProjectByAddress(this.ProjectAddress);
-      }
-    },
-  },
+		logout() {
+			this.$confirm("确定退出登录吗？", "提示", {
+				confirmButtonText: "确定",
+				cancelButtonText: "取消",
+				type: "warning",
+			})
+				.then(() => {
+					this.$store.commit("delToken");
+					this.$store.commit("delUser");
+					this.$message({
+						type: "success",
+						message: "退出成功",
+					});
+					this.$router.push("/login");
+				})
+				.catch(() => {});
+		},
+	},
+	created() {
+		this.defaultActivePath = `${this.$route.path
+			.split("/")
+			.slice(0, 2)
+			.join("/")}`;
+		this.ActivePath = `/${this.$route.path
+			.split("/")
+			.slice(0, 2)
+			.join("/")}`;
+		if (this.ActivePath === "//project-details") {
+			this.ProjectAddress = `${this.$route.path
+				.split("/")
+				.slice(2, 3)
+				.join("/")}`;
+			console.log(this.ProjectAddress);
+			this.getProjectByAddress(this.ProjectAddress);
+		}
+	},
+	watch: {
+		$route(to) {
+			this.ActivePath = `/${to.path.split("/").slice(0, 2).join("/")}`;
+			console.log(this.ActivePath);
+			if (this.ActivePath === "//project-details") {
+				this.ProjectAddress = `${this.$route.path
+					.split("/")
+					.slice(2, 3)
+					.join("/")}`;
+				console.log(this.ProjectAddress);
+				this.getProjectByAddress(this.ProjectAddress);
+			}
+		},
+	},
 };
 </script>
 
 <style scoped>
 .logo-box {
-  display: flex;
-  justify-content: center;
+	display: flex;
+	justify-content: center;
 }
 .logo-img {
-  width: 40px;
-  height: 40px;
-  margin: 13px 0 6px 0;
-  border-radius: 5px;
+	width: 40px;
+	height: 40px;
+	margin: 13px 0 6px 0;
+	border-radius: 5px;
 }
 .el-header {
-  display: flex;
-  align-items: center;
-  background-color: #ffffff;
-  color: black;
-  line-height: 60px;
-  border-bottom: 1px solid #e0e6ed;
-  padding-left: 10px;
-  z-index: 1000;
-  position: fixed;
-  width: 100%;
-  top: 0;
+	display: flex;
+	align-items: center;
+	background-color: #ffffff;
+	color: black;
+	line-height: 60px;
+	border-bottom: 1px solid #e0e6ed;
+	padding-left: 10px;
+	z-index: 1000;
+	position: fixed;
+	width: 100%;
+	top: 0;
 }
 .el-aside {
-  background-color: #ffffff;
-  color: #54575c;
-  overflow: hidden;
-  transition: width 0.3s ease-in-out;
-  position: fixed;
+	background-color: #ffffff;
+	color: #54575c;
+	overflow: hidden;
+	transition: width 0.3s ease-in-out;
+	position: fixed;
 }
 .el-menu {
-  background-color: #eceff558; /*侧边栏颜色*/
-  border-right: 0.5px solid #0000001f;
-  height: 100%;
-  overflow: hidden;
+	background-color: #eceff558; /*侧边栏颜色*/
+	border-right: 0.5px solid #0000001f;
+	height: 100%;
+	overflow: hidden;
 }
 .el-menu-item {
-  color: #54575c;
-  margin: 2px;
-  border-radius: 4px;
-  display: flex;
-  flex-direction: column;
-  padding: 9px;
+	color: #54575c;
+	margin: 2px;
+	border-radius: 4px;
+	display: flex;
+	flex-direction: column;
+	padding: 9px;
 }
 .el-menu-item:hover {
-  background-color: #eceff5; /*悬浮颜色*/
-  color: #54575c !important;
+	background-color: #eceff5; /*悬浮颜色*/
+	color: #54575c !important;
 }
 .el-menu-item.is-active {
-  background-color: #e5ecff !important; /*选中颜色*/
-  color: #3f6ffc !important; /*选中文字颜色*/
+	background-color: #e5ecff !important; /*选中颜色*/
+	color: #3f6ffc !important; /*选中文字颜色*/
 }
 .menu-text {
-  font-size: 12px;
-  position: relative;
-  line-height: 14px;
-  margin-top: 6px;
-  margin-left: -5.5px;
-  text-align: center;
-  left: -2.5px;
+	font-size: 12px;
+	position: relative;
+	line-height: 14px;
+	margin-top: 6px;
+	margin-left: -5.5px;
+	text-align: center;
+	left: -2.5px;
 }
 .el-main {
-  padding: 0px !important;
-  margin-top: 60px;
+	padding: 0px !important;
+	margin-top: 60px;
 }
 .header-title {
-  text-align: center;
-  font-size: 18px;
-  font-weight: bold;
-  margin: 10px;
-  cursor: default;
+	text-align: center;
+	font-size: 18px;
+	font-weight: bold;
+	margin: 10px;
+	cursor: default;
 }
 .header-router {
-  text-align: center;
-  font-size: 18px;
-  font-weight: 500;
-  margin: 10px;
+	text-align: center;
+	font-size: 18px;
+	font-weight: 500;
+	margin: 10px;
 }
 .header-router:hover {
-  cursor: pointer;
-  color: #2a75ff;
+	cursor: pointer;
+	color: #2a75ff;
 }
 .avatar-container {
-  height: 100%;
-  margin-bottom: 10px !important;
+	height: 100%;
+	margin-bottom: 10px !important;
 }
 .avatar-img {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  margin: 10px;
+	width: 30px;
+	height: 30px;
+	border-radius: 50%;
+	margin: 10px;
 }
 .username {
-  color: #54575c;
-  border: 0px;
-  text-align: center !important;
-  margin: 4px;
-  margin-left: 20px !important;
-  margin-bottom: 10px !important;
-  line-height: 31px;
+	color: #54575c;
+	border: 0px;
+	text-align: center !important;
+	margin: 4px;
+	margin-left: 20px !important;
+	margin-bottom: 10px !important;
+	line-height: 31px;
 }
 .avatar-item {
-  padding: 6px !important;
+	padding: 6px !important;
 }
 .main-container {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  transition: margin-left 0.3s ease-in-out;
+	height: 100%;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	transition: margin-left 0.3s ease-in-out;
 }
 .-webkit-scrollbar {
-  display: none;
+	display: none;
 }
 i {
-  font-size: 20px !important;
-  color: #6c6c6cc1;
-  margin-left: -2px;
+	font-size: 20px !important;
+	color: #6c6c6cc1;
+	margin-left: -2px;
 }
 .divider {
-  margin: 8px 13px;
-  border-bottom: 1px solid #00000021;
+	margin: 8px 13px;
+	border-bottom: 1px solid #00000021;
 }
 .home-nav {
-  margin-top: -7px;
-  border: none;
-  background-color: #ffffff;
+	margin-top: -7px;
+	border: none;
+	background-color: #ffffff;
 }
 .home-nav-item {
-  height: 60px;
-  flex-direction: row;
-  margin: 3px 8px;
-  padding: 3px 8px;
-  font-size: 16px;
-  line-height: 60px;
-  background-color: white;
-  border: none;
-  border-radius: 0;
+	height: 60px;
+	flex-direction: row;
+	margin: 3px 8px;
+	padding: 3px 8px;
+	font-size: 16px;
+	line-height: 60px;
+	background-color: white;
+	border: none;
+	border-radius: 0;
 }
 .home-nav-item::before {
-  height: 45px;
-  width: 155px;
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 10px;
-  background-color: #00000000;
-  border-radius: 5px;
+	height: 45px;
+	width: 155px;
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 10px;
+	background-color: #00000000;
+	border-radius: 5px;
 }
 .home-nav-item:hover.home-nav-item::before {
-  background-color: #6969691a;
+	background-color: #6969691a;
 }
 .home-nav-item.is-active {
-  background-color: white !important;
+	background-color: white !important;
 }
 </style>

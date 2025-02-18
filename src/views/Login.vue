@@ -40,139 +40,137 @@ import ValidCode from "@/components/others/ValidCode";
 import { login } from "@/api/user";
 
 export default {
-  name: "login",
-  components: {
-    ValidCode
-  },
-  data() {
-    // 验证码校验
-    const validateCode = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('请输入验证码'))
-      } else if (value.toLowerCase() !== this.code) {
-        callback(new Error('验证码错误'))
-      } else {
-        callback()
-      }
-    }
+	name: "login",
+	components: {
+		ValidCode,
+	},
+	data() {
+		// 验证码校验
+		const validateCode = (rule, value, callback) => {
+			if (value === "") {
+				callback(new Error("请输入验证码"));
+			} else if (value.toLowerCase() !== this.code) {
+				callback(new Error("验证码错误"));
+			} else {
+				callback();
+			}
+		};
 
-    return {
-      code: '',  // 验证码组件传递过来的code
-      user: {
-        code: '',   // 表单里用户输入的code 验证码
-        username: '',
-        password: ''
-      },
-      rules: {
-        username: [
-          { required: true, message: '请输入账号', trigger: 'blur' },
-        ],
-        password: [
-          { required: true, message: '请输入密码', trigger: 'blur' },
-        ],
-        code: [
-          { validator: validateCode, trigger: 'blur' }
-        ],
-      }
-    }
-  },
-  created() {},
-  methods: {
-    getCode(code) {
-      this.code = code.toLowerCase()
-    },
-    async login() {
-      this.$refs['loginRef'].validate(async (valid) => {
-        if (valid) {
-          try {
-            // 调用封装的登录接口
-            const response = await login({
-              username: this.user.username,
-              password: this.user.password
-            });
+		return {
+			code: "", // 验证码组件传递过来的code
+			user: {
+				code: "", // 表单里用户输入的code 验证码
+				username: "",
+				password: "",
+			},
+			rules: {
+				username: [
+					{ required: true, message: "请输入账号", trigger: "blur" },
+				],
+				password: [
+					{ required: true, message: "请输入密码", trigger: "blur" },
+				],
+				code: [{ validator: validateCode, trigger: "blur" }],
+			},
+		};
+	},
+	created() {},
+	methods: {
+		getCode(code) {
+			this.code = code.toLowerCase();
+		},
 
-            // 根据接口响应处理逻辑
-            if (response.code === 0) {
-              console.log(response);
-              this.$store.commit("setToken", response.data.jwt);  // vuex 储存 token
-              this.$store.commit("setUser", response.data.user);    // vuex 储存 用户信息
-              this.$router.push('/');
-              this.$message.success('登录成功');
-            } else {
-              this.$message.error(response.message || '登录失败');
-            }
-          } catch (error) {
-            this.$message.error('登录请求失败，请稍后再试');
-            console.error(error);
-          }
-        }
-      });
-    }
-  }
-}
+		async login() {
+			this.$refs["loginRef"].validate(async (valid) => {
+				if (valid) {
+					try {
+						// 调用封装的登录接口
+						const response = await login({
+							username: this.user.username,
+							password: this.user.password,
+						});
+
+						// 根据接口响应处理逻辑
+						if (response.code === 0) {
+							console.log(response);
+							this.$store.commit("setToken", response.data.jwt); // vuex 储存 token
+							this.$store.commit("setUser", response.data.user); // vuex 储存 用户信息
+							this.$router.push("/");
+							this.$message.success("登录成功");
+						} else {
+							this.$message.error(response.message || "登录失败");
+						}
+					} catch (error) {
+						this.$message.error("登录请求失败，请稍后再试");
+						console.error(error);
+					}
+				}
+			});
+		},
+	},
+};
 </script>
 
 <style scoped>
 .login-container {
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-image: url('@/assets/img/bg.jpg'); 
-  background-size: cover; 
-  background-position: center; 
-  background-repeat: no-repeat; 
+	height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-image: url("@/assets/img/bg.jpg");
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
 }
 
 .login-form {
-  display: flex;
-  background-color: white;
-  width: 50%;
-  height: 400px;
-  border-radius: 5px;
-  overflow: hidden;
-  background-color: rgba(255, 255, 255, 0.566);
-  backdrop-filter: blur(10px);
+	display: flex;
+	background-color: white;
+	width: 50%;
+	height: 400px;
+	border-radius: 5px;
+	overflow: hidden;
+	background-color: rgba(255, 255, 255, 0.566);
+	backdrop-filter: blur(10px);
 }
 
 .form-content {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 0px;
+	flex: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 0px;
 }
 
 .form-title {
-  font-size: 20px;
-  font-weight: bold;
-  text-align: center;
-  margin-bottom: 20px;
+	font-size: 20px;
+	font-weight: bold;
+	text-align: center;
+	margin-bottom: 20px;
 }
 
 .code-input {
-  display: flex;
+	display: flex;
 }
 
 .valid-code {
-  flex: 1;
-  height: 36px;
+	flex: 1;
+	height: 36px;
 }
 
 .register-link {
-  display: flex;
+	display: flex;
 }
 
 .register {
-  color: #0f9876;
-  cursor: pointer;
+	color: #0f9876;
+	cursor: pointer;
 }
 
 .form-image {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
+	flex: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 </style>
