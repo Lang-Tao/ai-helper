@@ -1,10 +1,11 @@
 import request from "@/utils/request";
 
 // 获取笔记列表
-export function getNoteList() {
+export function getNoteList(address) {
   return request({
-    url: "/note",
-    method: "get"
+    url: `/note/notelist?address=${address}`,
+    method: "get",
+
   });
 }
 
@@ -14,9 +15,6 @@ export function createNoteFolder(data) {
     url: "/folder",
     method: "post",
     data: data,
-    header: {
-        Authorization: localStorage.getItem("token")
-    }
   });
 }
 
@@ -25,8 +23,5 @@ export function deleteNoteFolder(id) {
   return request({
     url: "/folder/" + id,
     method: "delete",
-    header: {
-        Authorization: localStorage.getItem("token")
-    }
   });
 }

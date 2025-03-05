@@ -97,6 +97,9 @@ export default {
 							this.$store.commit("setUser", response.data.user); // vuex 储存 用户信息
 							this.$router.push("/");
 							this.$message.success("登录成功");
+							var token = localStorage.getItem("token");
+							console.log("token:" + token);
+							console.log("token类型:" + typeof token);
 						} else {
 							this.$message.error(response.message || "登录失败");
 						}

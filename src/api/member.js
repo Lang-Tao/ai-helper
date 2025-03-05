@@ -1,26 +1,23 @@
 import request from "@/utils/request";
 
 // 获取成员列表
-export function getMemberList(id) {
+export function getMemberList(address) {
   return request({
-    url: "/member",
+    url: `/member?address=${address}`,
     method: "get",
-    params:{projectId:id},
-    headers: {
-      Authorization: localStorage.getItem("token")
-    }
+
   });
 }
 
 // 新增项目成员 
-export function addMember(data) {
+export function addMember(address, username) {
   return request({
     url: "/member",
     method: "post",
-    data: data,
-    headers: {
-      Authorization: localStorage.getItem("token")
-    }
+    data: {
+      address: address,
+      username: username
+    },
   });
 }
 
@@ -30,9 +27,6 @@ export function saveMember(data) {
     url: "/member",
     method: "put",
     data: data,
-    headers: {
-      Authorization: localStorage.getItem("token")
-    }
   });
 }
 
@@ -41,8 +35,5 @@ export function deleteMember(id) {
   return request({
     url: "/member/" + id,
     method: "delete",
-    headers: {
-      Authorization: localStorage.getItem("token")
-    }
   });
 }

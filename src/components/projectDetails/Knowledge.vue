@@ -101,13 +101,14 @@ export default {
 	},
 	methods: {
 		// 获取笔记列表
-		getNoteList() {
-			getNoteList().then((res) => {
+		getNoteList(address) {
+			getNoteList(address).then((res) => {
 				console.log(res);
 				this.noteList = res.data;
 			});
 		},
 
+		// 搜索笔记
 		filterNotes(notes, searchTerm) {
 			return notes
 				.map((note) => {
@@ -128,6 +129,7 @@ export default {
 				.filter((note) => note !== null);
 		},
 
+		// 处理对笔记和文件夹的点击
 		handleNodeClick(data) {
 			if (this.selectedNote && this.$refs.wangEditor) {
 				this.$refs.wangEditor.saveNote();
@@ -151,6 +153,7 @@ export default {
 			});
 		},
 
+		// 根据id搜索笔记（不知道干啥用的）
 		findNoteById(noteList, noteId) {
 			for (const note of noteList) {
 				if (note.id === noteId) {
@@ -224,6 +227,7 @@ export default {
 				.catch(() => {});
 		},
 
+		// 渲染h5模式（富文本编辑）
 		renderContent(h, { node, data }) {
 			return h("span", [
 				h("span", { class: "custom-tree-node" }, [
@@ -266,6 +270,7 @@ export default {
 			]);
 		},
 
+		// 双击修改笔记标题
 		headerDbClick(data) {
 			this.currentName = data.title;
 			this.$set(data, "isEdit", true);
@@ -273,7 +278,7 @@ export default {
 				this.$refs[data.id] && this.$refs[data.id].focus();
 			});
 		},
-
+		// 处理拖拽
 		handleInputBlur(event, data) {
 			const inputName = event.target.value.trim();
 			if (inputName === "") {
@@ -341,9 +346,9 @@ export default {
 	},
 
 	// 初始化获取笔记列表
-	// mounted() {
-	//   this.getNoteList();
-	// },
+	mounted() {
+		this.getNoteList("qwe");
+	},
 };
 </script>
 

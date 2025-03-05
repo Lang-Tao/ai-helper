@@ -1,10 +1,10 @@
-import request from '@/utils/request' 
-import request_urlencoded from '@/utils/request_urlencoded' 
+import request from '@/utils/request'
+import request_urlencoded from '@/utils/request_urlencoded'
 
 // 验证登录信息
 export function login(data) {
   return request_urlencoded({
-    url: '/user/login', 
+    url: '/user/login',
     method: 'post',
     data: {
       username: data.username,
@@ -35,10 +35,7 @@ export function updateUser(data) {
   return request({
     url: '/user/update',
     method: 'put',
-    data:data,
-    headers:{
-      Authorization: localStorage.getItem('token')
-    }
+    data: data,
   });
 }
 
@@ -48,9 +45,6 @@ export function updateAvatar(avatarUrl) {
     url: '/user/updateAvatar',
     method: 'patch',
     params: { avatarUrl },
-    headers:{
-      Authorization: localStorage.getItem('token')
-    }
   });
 }
 

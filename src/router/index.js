@@ -9,7 +9,7 @@ const routes = [
   {
     path: '/',
     name: 'manager',
-    redirect: '/home',
+    redirect: '/project',
     component: () => import('../views/Manager.vue'),
     children: [
       {
@@ -48,7 +48,7 @@ const routes = [
         meta: { title: '审查' },
         component: () => import('../views/Manager/Check.vue'),
         redirect: '/check/person-check',
-        children:[
+        children: [
           {
             path: 'person-check',
             name: 'person-check',
@@ -69,7 +69,7 @@ const routes = [
         meta: { title: '团队' },
         component: () => import('../views/Manager/Team.vue'),
         redirect: '/team/team-member',
-        children:[
+        children: [
           {
             path: 'team-member',
             name: 'team-member',
@@ -90,7 +90,7 @@ const routes = [
         meta: { title: '事项' },
         component: () => import('../views/Manager/Issue.vue'),
         redirect: '/user/task',
-        children:[
+        children: [
           {
             path: 'task',
             name: 'task',
@@ -109,47 +109,47 @@ const routes = [
         path: '/project-details/:address',
         name: 'ProjectDetails',
         meta: { title: '当前项目' },
-        redirect: '/project-details/:address/Repository',
+        redirect: '/project-details/:address/Knowledge',
         component: () => import('../components/project/ProjectDetail.vue'),
         props: true,
         children: [
-          { 
-            path: 'Home', 
+          {
+            path: 'Home',
             name: 'projectHome',
             meta: { title: '项目概览' },
             props: true,
             component: () => import('../components/projectDetails/Home.vue')
-            
+
           },
-          { 
-            path: 'QnA', 
+          {
+            path: 'QnA',
             name: 'projectQnA',
             meta: { title: '智能问答' },
             props: true,
             component: () => import('../components/projectDetails/QnA.vue')
           },
-          { 
-            path: 'Repository', 
+          {
+            path: 'Repository',
             name: 'projectRepository',
             meta: { title: '代码仓库' },
             props: true,
             component: () => import('../components/projectDetails/Repository.vue'),
             redirect: '/project-details/:address/Repository/git',
-            children:[
-              { 
-                path: 'git', 
+            children: [
+              {
+                path: 'git',
                 name: 'repoGit',
                 props: true,
                 component: () => import('../components/repositoryViews/Git.vue')
               },
-              { 
-                path: 'merges', 
+              {
+                path: 'merges',
                 name: 'repoMerge',
                 props: true,
                 component: () => import('../components/repositoryViews/MergeRequests.vue')
               },
-              { 
-                path: 'settings', 
+              {
+                path: 'settings',
                 name: 'repoSettings',
                 props: true,
                 component: () => import('../components/repositoryViews/Settings.vue')
@@ -162,9 +162,9 @@ const routes = [
               },
             ]
           },
-          
-          { 
-            path: 'Collaboration', 
+
+          {
+            path: 'Collaboration',
             name: 'projectCollaboration',
             meta: { title: '项目协同' },
             props: true,
@@ -176,15 +176,15 @@ const routes = [
             meta: { title: '知识库' },
             component: () => import('../components/projectDetails/Knowledge.vue')
           },
-          { 
-            path: 'Summary', 
+          {
+            path: 'Summary',
             name: 'projectSummary',
             meta: { title: '项目总结' },
             props: true,
             component: () => import('../components/projectDetails/Summary.vue')
           },
-          { 
-            path: 'Setting', 
+          {
+            path: 'Setting',
             name: 'projectSetting',
             meta: { title: '项目设置' },
             props: true,
@@ -198,21 +198,21 @@ const routes = [
         redirect: '/project/involved',
         meta: { title: '项目' },
         component: () => import('../views/Manager/Project.vue'),
-        children:[
+        children: [
           {
-            path: 'involved', 
+            path: 'involved',
             name: 'involved',
             meta: { title: '项目' },
             component: () => import('../views/Manager/Project/InvolvedProject.vue')
           },
           {
-            path: 'manage', 
+            path: 'manage',
             name: 'imanage',
             meta: { title: '项目' },
             component: () => import('../views/Manager/Project/ManageProject.vue')
           },
           {
-            path: 'all', 
+            path: 'all',
             name: 'all',
             meta: { title: '项目' },
             component: () => import('../views/Manager/Project/AllProject.vue')
@@ -265,7 +265,7 @@ const router = new VueRouter({
 
 // 解决导航栏或者底部导航tabBar中的vue-router在3.0版本以上频繁点击菜单报错的问题。
 const originalPush = VueRouter.prototype.push
-VueRouter.prototype.push = function push (location) {
+VueRouter.prototype.push = function push(location) {
   return originalPush.call(this, location).catch(err => err)
 }
 
@@ -278,7 +278,7 @@ router.beforeEach((to, from, next) => {
     let token = localStorage.getItem('token')
     if (token === null || token === '') {
       next('/login')
-    }else{
+    } else {
       next()
     }
   }

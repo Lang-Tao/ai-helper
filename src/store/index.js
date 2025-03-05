@@ -8,19 +8,19 @@ const store = new Vuex.Store({
 
   state: {
     // 存储token
-    token:"",
-    user:{} 
+    token: "",
+    user: {}
   },
 
   getters: {
-	getToken(state){
-		return state.token || storage.get("token") || "";
-	}
+    getToken(state) {
+      return state.token || storage.get("token") || "";
+    }
   },
 
   mutations: {
     // 修改token，并将token存入localStorage
-    setToken(state,token) {
+    setToken(state, token) {
       state.token = token;
       storage.set('token', token);
       console.log('store、localstorage保存token成功！');
@@ -32,7 +32,7 @@ const store = new Vuex.Store({
     },
     setUser(state, user) {
       state.user = user;
-      console.log('user：',user);
+      console.log('user：', user);
     },
     delUser(state, user) {
       state.user = {};
@@ -45,10 +45,10 @@ const store = new Vuex.Store({
   },
 
   actions: {
-   // removeToken: (context) => {
-     // context.commit('setToken')
-   // }
-   },
+    // removeToken: (context) => {
+    // context.commit('setToken')
+    // }
+  },
 });
-  
+
 export default store;

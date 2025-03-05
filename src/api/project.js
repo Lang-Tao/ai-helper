@@ -5,9 +5,6 @@ export function getProjectList() {
   return request({
     url: "/project",
     method: "GET",
-    headers: {
-      Authorization: localStorage.getItem("token")
-    }
   });
 }
 
@@ -16,10 +13,7 @@ export function createProject(data) {
   return request({
     url: "/project",
     method: "POST",
-    data:data,
-    headers: {
-      Authorization: localStorage.getItem("token")
-    }
+    data: data,
   });
 }
 
@@ -28,9 +22,6 @@ export function getProjectInfo(address) {
   return request({
     url: `/project/address?address=${address}`,
     method: "GET",
-    headers: {
-      Authorization: localStorage.getItem("token")
-    }
   });
 }
 
@@ -39,10 +30,7 @@ export function updateProject(data) {
   return request({
     url: "/project",
     method: "PUT",
-    data:data,
-    headers: {
-      Authorization: localStorage.getItem("token")
-    }
+    data: data,
   });
 }
 
@@ -51,9 +39,6 @@ export function getProjectFileList(repo) {
   return request({
     url: `/gitea/listpath?repo=${repo}`,
     method: "GET",
-    headers: {
-      Authorization: localStorage.getItem("token")
-    }
   });
 }
 
@@ -62,9 +47,6 @@ export function getProjectFileContent(path, address) {
   return request({
     url: `/gitea/getfile?path=${path}&address=${address}`,
     method: "GET",
-    headers: {
-      Authorization: localStorage.getItem("token")
-    }
   })
 }
 
@@ -73,8 +55,5 @@ export function deleteProject(address) {
   return request({
     url: `/project?address=${address}`,
     method: "DELETE",
-    headers: {
-      Authorization: localStorage.getItem("token")
-    }
   })
 }

@@ -8,10 +8,10 @@
             <img src="../assets/img/AIlogo.png" class="logo-img">
           </div>
 
-          <el-menu-item index="/home">
+          <!-- <el-menu-item index="/home">
             <i class="el-icon-menu"></i>
             <span class="menu-text" style="margin-left: -4.5px;" slot="title">工作台</span>
-          </el-menu-item>
+          </el-menu-item> -->
 
           <el-menu-item index="/project">
             <i class="el-icon-folder-opened"></i>
@@ -28,25 +28,25 @@
             <span class="menu-text" slot="title">问答</span>
           </el-menu-item>
 
-          <el-menu-item index="/check">
+          <!-- <el-menu-item index="/check">
             <i class="el-icon-tickets"></i>
             <span class="menu-text" slot="title">审查</span>
-          </el-menu-item>
+          </el-menu-item> -->
 
           <el-menu-item index="/team">
             <i class="el-icon-user"></i>
             <span class="menu-text" slot="title">团队</span>
           </el-menu-item>
 
-          <el-menu-item index="/study">
+          <!-- <el-menu-item index="/study">
             <i class="el-icon-data-line"></i>
             <span class="menu-text" slot="title">课程</span>
-          </el-menu-item>
+          </el-menu-item> -->
 
-          <el-menu-item index="/settings">
+          <!-- <el-menu-item index="/settings">
             <i class="el-icon-setting"></i>
             <span class="menu-text" slot="title">设置</span>
-          </el-menu-item>
+          </el-menu-item> -->
 
           <div class="divider"></div>
 

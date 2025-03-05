@@ -2,7 +2,7 @@ import axios from 'axios'
 
 // 创建可一个新的axios对象
 const request = axios.create({
-  baseURL: 'http://121.43.48.182:8081/api',   // 后端的接口地址  ip:port
+  baseURL: 'http://192.168.97.109:8081/api',   // 后端的接口地址  ip:port
   timeout: 30000
 })
 
@@ -13,7 +13,7 @@ request.interceptors.request.use(config => {
   config.headers['Content-Type'] = 'application/json;charset=utf-8';
   // let user = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null
 
-  // config.headers['Authorization'] = this.$store.state.token  // 设置请求头
+  config.headers['Authorization'] = localStorage.getItem("token").slice(1, -1) // 设置请求头
 
   return config
 }, error => {

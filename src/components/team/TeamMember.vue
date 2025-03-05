@@ -9,7 +9,7 @@
 
       <div class="btn-box">
         <el-input v-model="newMemberName" placeholder="请输入成员名称" style="margin-right: 10px" size="mini"></el-input>
-        <el-button type="text" @click="addMember">添加成员</el-button>
+        <el-button type="text" @click="addMember(newMemberName)">添加成员</el-button>
         <el-button type="text" @click="saveTeam">保存更改</el-button>
       </div>
     </div>
@@ -20,9 +20,9 @@
         <el-table-column label="成员名称" align="center" width="300">
           <template slot-scope="scope">
             <div class="username">
-              <el-avatar :src="scope.row.user.avatar" size="small"></el-avatar>
+              <el-avatar :src="scope.row.avatar" size="small"></el-avatar>
 
-              <span style="margin-left: 10px">{{ scope.row.user.username }}</span>
+              <span style="margin-left: 10px">{{ scope.row.username }}</span>
 
               <el-button type="text" icon="el-icon-delete" @click="deleteMember(scope.row)" style="margin-left: 10px"></el-button>
             </div>
@@ -31,7 +31,7 @@
         <el-table-column label="邮箱" align="center" width="590">
           <template slot-scope="scope">
 
-            <span>{{ scope.row.user.email }}</span>
+            <span>{{ scope.row.email }}</span>
 
           </template>
         </el-table-column>
@@ -55,132 +55,160 @@
 <script>
 import { getProjectList } from "@/api/project";
 import {
-  getMemberList,
-  addMember,
-  saveMember,
-  deleteMember,
+	getMemberList,
+	addMember,
+	saveMember,
+	deleteMember,
 } from "@/api/member";
 
 export default {
-  name: "TeamMember",
-  data() {
-    return {
-      isAdmin: true,
-      projectList: [],
-      selectedProjectName: "",
-      currentTeam: {},
-      newMemberName: "",
-    };
-  },
-  methods: {
-    getProjectList() {
-      getProjectList()
-        .then((res) => {
-          if (res.code === 0) {
-            this.projectList = res.data;
-            this.selectedProjectName =
-              this.projectList.length > 0 ? this.projectList[0].name : "";
-            this.currentTeam = this.getTeamById(this.selectedProject.id);
-          } else {
-            console.error(res.message || "获取列表失败");
-          }
-        })
-        .catch((err) => {
-          console.error("Error:", err);
-        });
-    },
+	name: "TeamMember",
+	data() {
+		return {
+			isAdmin: true,
+			projectList: [],
+			selectedProjectName: "",
+			currentTeam: {},
+			newMemberName: "",
+		};
+	},
+	methods: {
+		getProjectList() {
+			getProjectList()
+				.then((res) => {
+					if (res.code === 0) {
+						this.projectList = res.data;
+						this.selectedProjectName =
+							this.projectList.length > 0
+								? this.projectList[0].name
+								: "";
+						this.selectedProject = this.projectList.find(
+							(item) => item.name === this.selectedProjectName
+						);
+						console.log("选中项目：", this.selectedProject);
+						this.currentTeam = this.getTeamByAddress(
+							this.selectedProject.address
+						);
+					} else {
+						console.error(res.message || "获取列表失败");
+					}
+				})
+				.catch((err) => {
+					console.error("Error:", err);
+				});
+		},
 
-    // 根据id获取团队信息
-    getTeamById(projectId) {
-      getMemberList(projectId)
-        .then((res) => {
-          if (res.code === 0) {
-            console.log("获取团队信息接口返回数据：" + res);
-            console.log(res);
+		// 根据address获取团队信息
+		getTeamByAddress(projectAddress) {
+			getMemberList(projectAddress)
+				.then((res) => {
+					if (res.code === 0) {
+						console.log("获取团队信息接口返回数据：" + res);
+						this.currentTeam = res.data;
+					} else {
+						console.log(res.message || "获取团队信息失败");
+					}
+				})
+				.catch((err) => {
+					console.error("Error:", err);
+				});
+		},
 
-            this.currentTeam = res.data;
-          } else {
-            console.error(res.message || "获取团队信息失败");
-          }
-        })
-        .catch((err) => {
-          console.error("Error:", err);
-        });
-    },
+		// todo 提交团队信息并保存
+		saveTeam() {},
 
-    // todo 提交团队信息并保存
-    saveTeam() {},
+		// 根据username添加成员
+		addMember(newMemberName) {
+			const projectAddress = this.selectedProject.address;
+			console.log(projectAddress, newMemberName);
+			console.log("name:", newMemberName);
 
-    // todo 根据username搜索用户
-    // todo 添加成员
-    addMember(newMemberName) {},
+			addMember(projectAddress, newMemberName)
+				.then((res) => {
+					console.log("addMemberres:", res);
 
-    // 删除成员
-    deleteMember(member) {
-      const projectId = this.selectedProject.id;
-      deleteMember(projectId, member.id)
-        .then((res) => {
-          if (res.code === 0) {
-            this.$message.success("删除成功");
-            this.currentTeam.members = this.currentTeam.members.filter(
-              (m) => m.id !== member.id
-            );
-          } else {
-            this.$message.error("删除失败");
-          }
-        })
-        .catch((err) => {
-          console.error("Error:", err);
-        });
-    },
-  },
-  watch: {
-    selectedProjectName(newVal) {
-      this.selectedProject = this.projectList.find(
-        (item) => item.name === newVal
-      );
-      this.getTeamById(this.selectedProject.id);
-    },
-  },
-  created() {
-    this.getProjectList();
-  },
+					if (res.code === 0) {
+						this.$message.success("添加成功");
+						this.currentTeam.members.push(res.data);
+						this.newMemberName = "";
+						this.getTeamByAddress(this.selectedProject.address);
+					} else {
+						this.$message.error("添加失败");
+					}
+				})
+				.catch((err) => {
+					console.error("Error:", err);
+				});
+		},
+
+		// 删除成员
+		deleteMember(member) {
+			const projectId = this.selectedProject.id;
+			deleteMember(projectId, member.id)
+				.then((res) => {
+					if (res.code === 0) {
+						this.$message.success("删除成功");
+						this.currentTeam.members =
+							this.currentTeam.members.filter(
+								(m) => m.id !== member.id
+							);
+					} else {
+						this.$message.error("删除失败");
+					}
+				})
+				.catch((err) => {
+					console.error("Error:", err);
+				});
+		},
+	},
+	watch: {
+		selectedProjectName(newVal) {
+			this.selectedProject = this.projectList.find(
+				(item) => item.name === newVal
+			);
+			console.log("发送请求，选中项目：", this.selectedProject.address);
+			this.getTeamByAddress(this.selectedProject.address);
+		},
+	},
+	created() {
+		this.getProjectList();
+	},
 };
 </script>
 
 <style scoped>
 .team-member {
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
+	padding: 24px;
+	display: flex;
+	flex-direction: column;
 }
 .btn-box {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
 }
 .member-list-container {
-  margin-top: 20px;
-  background-color: #fff;
-  border: 1px solid #cccccc64;
-  border-radius: 5px;
+	margin-top: 20px;
+	background-color: #fff;
+	border: 1px solid #cccccc64;
+	border-radius: 5px;
 }
 .member-list {
-  text-align: center;
+	text-align: center;
 }
 .header-box {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }
 .role-select {
-  width: 120px;
+	width: 120px;
 }
 .username {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 </style>
 
