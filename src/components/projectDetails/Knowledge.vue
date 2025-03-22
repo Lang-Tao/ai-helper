@@ -153,7 +153,7 @@ export default {
 			});
 		},
 
-		// 根据id搜索笔记（不知道干啥用的）
+		// 根据id搜索笔记
 		findNoteById(noteList, noteId) {
 			for (const note of noteList) {
 				if (note.id === noteId) {
