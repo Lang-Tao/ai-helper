@@ -9,7 +9,7 @@
   "dependencies": {
     "@vue-office/docx": "^1.6.2",
     "@vue-office/excel": "^1.7.11",
-    "@vue-office/pdf": "^2.0.2",
+    "@vue-office/pdf": "^2.0.10",
     "@vue/composition-api": "^1.7.2",
     "@wangeditor/editor": "^5.1.23",
     "@wangeditor/editor-for-vue": "^1.0.2",
